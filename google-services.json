@@ -1,0 +1,50 @@
+{
+  "project_info": {
+    "project_number": "157595455454",
+    "project_id": "kuatia-86c03",
+    "storage_bucket": "kuatia-86c03.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:157595455454:android:b9679d15b26f98d864174f",
+        "android_client_info": {
+          "package_name": "com.cardpy.kuatia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "157595455454-pjiq01tls3a8hjgg6g00m1fnhcieubk4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cardpy.kuatia",
+            "certificate_hash": "3a3d52e8a35eda81890bc37cac00b7bee3760afd"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGqxAFRaSKyO1DSzs-fWfmLgHv3fjttoI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "157595455454-1280e34936iocmtkqha1qsrb5qe99etr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "157595455454-gth7mn2i3kthbpojhvbe7uc184963l1a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cardpy.kuatia"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

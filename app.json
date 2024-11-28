@@ -1,0 +1,52 @@
+{
+  "expo": {
+    "name": "kuatia",
+    "slug": "kuatia",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "android": {
+      "googleServicesFile": "./google-services.json",
+      "package": "com.cardpy.kuatia",
+      "versionCode": 1, 
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "ios": {
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "bundleIdentifier": "com.cardpy.kuatia",
+      "supportsTablet": true,
+      "buildNumber": "1" 
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-dev-launcher",
+        {
+          "launchMode": "most-recent"
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "97967b95-c6e8-4ff3-bb28-848a3461e987"
+      }
+    },
+    "scheme": "kuatia",
+    "owner": "cardpy7"
+  },
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-4622872693950947~9382285867",
+    "ios_app_id": "ca-app-pub-4622872693950947~1714714682"
+  }
+}
