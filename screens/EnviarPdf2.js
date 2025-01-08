@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { TouchableOpacity, StyleSheet, Text, Alert, ActivityIndicator, View, Platform } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, Alert, ActivityIndicator, View } from 'react-native';
 import { EvilIcons } from '@expo/vector-icons';
 import { InterstitialAd, AdEventType, TestIds } from 'react-native-google-mobile-ads';
-import RNHTMLtoPDF from 'react-native-html-to-pdf';
-import * as Sharing from 'expo-sharing';
-import EnviarPdf2 from './EnviarPdf2';
+import * as Print from 'expo-print';
 
-const EnviarPdf1 = ({ photo1, photo2 }) => {
+const EnviarPdf2 = ({ photo1, photo2 }) => {
   const [interstitial, setInterstitial] = useState(null);
   const [isAdLoaded, setIsAdLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false); // Estado para el loader
@@ -51,7 +49,7 @@ const EnviarPdf1 = ({ photo1, photo2 }) => {
 
   const generatePDF = async () => {
     if (!photo1 || !photo2) {
-      Alert.alert("Error", "Corregimos el error, intentalo de nuevo, ya deberia funcionar");
+      Alert.alert("Error", "Asegúrate de tomar ambas fotos antes de generar el PDF.");
       return;
     }
     setIsLoading(true); // Activa el loader
@@ -65,7 +63,7 @@ const EnviarPdf1 = ({ photo1, photo2 }) => {
             padding: 20px;
           }
           .image-container {
-            display: flex;
+           display: flex;
             justify-content: center;
             gap: 130px;
             padding: 10px 50px 20px;
@@ -88,22 +86,14 @@ const EnviarPdf1 = ({ photo1, photo2 }) => {
       </body>
       </html>
     `;
-    
-      const options = {
+
+      await Print.printAsync({
         html: htmlContent,
-        fileName: 'document_photos',
-        directory: 'Documents',
-      };
+      });
 
-      const file = await RNHTMLtoPDF.convert(options);
-
-      if (await Sharing.isAvailableAsync()) {
-        await Sharing.shareAsync(file.filePath);
-      } else {
-        Alert.alert('PDF generado', `El PDF se ha guardado en: ${file.filePath}`);
-      }
+      Alert.alert("Éxito", "El contenido está listo para imprimir o guardar como PDF.");
     } catch (error) {
-      console.error('Error al generar el PDF:', error);
+      console.error("Error al generar el PDF:", error);
     } finally {
       setIsLoading(false); // Desactiva el loader
     }
@@ -114,21 +104,10 @@ const EnviarPdf1 = ({ photo1, photo2 }) => {
       {isLoading ? (
         <ActivityIndicator size="large" color="#1462fc" /> // Muestra un spinner mientras carga
       ) : (
-        <>
-        {Platform.OS === 'ios' ? (
         <TouchableOpacity style={styles.button} onPress={showInterstitialAd}>
-          <EvilIcons name="share-apple" size={22} color="#FFFFFF"/>
+          <EvilIcons name="share-apple" size={22} color="#FFFFFF" />
           <Text style={styles.text}>Enviar PDF</Text>
         </TouchableOpacity>
-  ) : (
-    <EnviarPdf2
-      photo1={photo1}
-      photo2={photo2}
-      />)}
-         
-         
-         </> 
-
       )}
     </View>
   );
@@ -136,7 +115,7 @@ const EnviarPdf1 = ({ photo1, photo2 }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginLeft:35
+    marginLeft: 35,
   },
   button: {
     flexDirection: 'row',
@@ -153,4 +132,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EnviarPdf1;
+export default EnviarPdf2;

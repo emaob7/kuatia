@@ -38,3 +38,11 @@ yarn-error.*
 .git
 web-build
 *.log
+
+.env
+ios/Pods/
+*.log
+
+android/
+ios/
+

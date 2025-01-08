@@ -53,7 +53,7 @@ export default function Login() {
       if (uid !== null) { 
       // console.log("User logged in memory!", userData);
       
-        navigation.replace( "MyTabs")
+        navigation.replace( "Inicio")
       } else {
        // console.error('Error al obtener datos del usuario de AsyncStorage:');
        setShowLoginForm(true);
@@ -67,7 +67,7 @@ export default function Login() {
          await AsyncStorage.setItem("nombre",(nombre));
          await AsyncStorage.setItem("foto",(foto));
          
-         navigation.replace( "MyTabs")
+         navigation.replace( "Inicio")
         } else {
           console.log("user not authenticated");
         }

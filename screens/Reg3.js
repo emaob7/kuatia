@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Button, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, Button, Image, TouchableOpacity, StyleSheet, Alert, Platform  } from 'react-native';
 import { Camera, CameraView, useCameraPermissions } from 'expo-camera';
 import * as FileSystem from 'expo-file-system';
 import { Ionicons } from '@expo/vector-icons';
@@ -201,7 +201,7 @@ const handleDeletePhoto = async () => {
              <TouchableOpacity onPress={() => setCurrentPhoto(currentPhoto === photo33 ? photo43 : photo33)}>
               <Image source={{ uri: currentPhoto }} style={styles.image} />
             </TouchableOpacity>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10,marginBottom:-10 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10,marginBottom:-70 }}>
             <Button title="Eliminar" onPress={handleDeletePhoto} />
             <EnviarPdf1
      photo1={photo33}
@@ -240,23 +240,25 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop:-50
   },
   agregar: {
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 375,
-    height: 574,
+    backgroundColor:"#ebf1ff",
+    width: Platform.OS === 'android' ? 345 : 395,
+    height: Platform.OS === 'android' ?  504 :594,
     borderWidth: 1,
     borderStyle: 'dashed',
     borderColor: "#000000",
     borderRadius: 24,
-    backgroundColor:"#ebf1ff",
+
   },
 
   camera: {
-    width: 351,
-    height: 550,
+    width: 349,
+    height: 552,
     marginTop:-50,
     alignItems: 'center',
     justifyContent: 'center',
@@ -293,16 +295,16 @@ const styles = StyleSheet.create({
    // backgroundColor: 'black',
   },
   circleButton: {
-    width: 110,
-    height: 110,
+    width: Platform.OS === 'android' ? 70 :110,
+    height: Platform.OS === 'android' ? 70 :110,
     borderRadius: 60,
     backgroundColor: '#FFFFFF',
     justifyContent: 'center',
     alignItems: 'center',
   },
   circle: {
-    width: 100,
-    height: 100,
+    width: Platform.OS === 'android' ? 65 :100,
+    height: Platform.OS === 'android' ? 65 :100,
     borderRadius: 50,
     backgroundColor: '#1462fc',
     alignItems: 'center',
@@ -311,6 +313,7 @@ const styles = StyleSheet.create({
   },
   super1:{
     fontSize: 25,
+    
   },
   textAyuda: {
     justifyContent: 'center',
@@ -318,24 +321,27 @@ const styles = StyleSheet.create({
    color: "#424242"
   },
   super2:{
-    fontSize: 25,
-marginTop:-30,
+    fontSize: Platform.OS === 'android' ? 18 :25,
+marginTop: Platform.OS === 'android' ? 50 :-80,
   },
   textAyuda2: {
     justifyContent: 'center',
-    fontSize:16,
+    fontSize:Platform.OS === 'android' ? 11 :13,
    color: "#424242",
-   marginBottom: 12
+   marginBottom: 10,
   },
   ayudaContainer:{
     marginTop:-10,
     marginBottom:60,
     width:350,
+    
+
   },
   ayudaContainer2:{
-    marginTop:-550,
+    marginTop:-510,
     marginBottom:65,
     width:"90%",
+    height:200,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -343,16 +349,17 @@ marginTop:-30,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    
 
   },
   image: {
-     width: 395,
-    height: 594,
-    resizeMode: 'contain',
+     width: Platform.OS === 'android' ? 345: 395,
+    height: Platform.OS === 'android' ? 504:594,
+    resizeMode: Platform.OS === 'ios' ? 'contain':'auto',
     borderWidth: 8,
     borderColor: "#e9eaee",
     borderRadius: 24,
+  transform: Platform.OS === 'android' ?[{ rotate: '0deg' }]:'auto',
+    marginVertical:Platform.OS === 'android' ? 10 : '',
   },
   volver: {
     padding: 5,
@@ -361,3 +368,4 @@ marginTop:-30,
     marginLeft:"-85%",
   },
 });
+

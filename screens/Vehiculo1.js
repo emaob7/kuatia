@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity,Platform } from 'react-native';
 import Habi1 from './Habi1';
 import Reg1 from './Reg1';
 import Cedu1 from './Cedu1';
@@ -68,22 +68,24 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-arround',
-    paddingTop: 50,
-    paddingHorizontal:15
+    paddingVertical: Platform.OS === 'android' ? 20 :12,
+    paddingHorizontal:15,
+    marginTop:0,
+    marginBottom:26,
   },
   button: {
-    //width: 30,
+    width: "auto",
     height: 30,
     borderRadius: 30,
     backgroundColor: '#2196F3',
     justifyContent: 'center',
     alignItems: 'center',
     marginHorizontal:5,
-    paddingHorizontal:10
+    paddingHorizontal:10,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 15,
+    fontSize: Platform.OS === 'android' ? 11 : 16,
     fontWeight: 'bold',
   },
   screenContainer: {

@@ -1,24 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, Button, Image, TouchableOpacity, StyleSheet, Alert, Platform  } from 'react-native';
-import { Camera, CameraView, useCameraPermissions } from 'expo-camera';
+import { View, Text, Button, Image, TouchableOpacity, StyleSheet, Alert, Platform } from 'react-native';
+import { Camera, CameraView } from 'expo-camera';
 import * as FileSystem from 'expo-file-system';
 import { Ionicons } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import EnviarPdf1 from './EnviarPdf1';
 
 
-export default function CVerde3({ showCamera, setShowCamera }) {
+export default function Habi1({ showCamera, setShowCamera }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraReady, setCameraReady] = useState(false);
- // const [showCamera, setShowCamera] = useState(false);
-  const [photo73, setPhoto73] = useState(null);
-  const [photo83, setPhoto83] = useState(null);
+  const [photo1, setPhoto1] = useState(null);
+  const [photo2, setPhoto2] = useState(null);
   const [currentPhoto, setCurrentPhoto] = useState(null);
   const cameraRef = useRef(null);
   const [facing, setFacing] = useState('back');
 
+
+
   useEffect(() => {
-    (async () => {
+    (async () => { 
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === 'granted');
     })();
@@ -27,19 +28,21 @@ export default function CVerde3({ showCamera, setShowCamera }) {
   useEffect(() => {
     (async () => {
       try {
-        const photo73Uri = await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'photo73.jpg');
-        const photo83Uri = await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'photo83.jpg');
+        const photo1Uri = await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'photo1.jpg');
+        const photo2Uri = await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'photo2.jpg');
         
-        if (photo73Uri.exists) {
-          const photo73Base64 = await FileSystem.readAsStringAsync(FileSystem.documentDirectory + 'photo73.jpg', { encoding: FileSystem.EncodingType.Base64 });
-          setPhoto73(`data:image/jpg;base64,${photo73Base64}`);
-          setCurrentPhoto(`data:image/jpg;base64,${photo73Base64}`);
+        if (photo1Uri.exists) {
+          const photo1Base64 = await FileSystem.readAsStringAsync(FileSystem.documentDirectory + 'photo1.jpg', { encoding: FileSystem.EncodingType.Base64 });
+          setPhoto1(`data:image/jpg;base64,${photo1Base64}`);
+          setCurrentPhoto(`data:image/jpg;base64,${photo1Base64}`);
         }
 
-        if (photo83Uri.exists) {
-          const photo83Base64 = await FileSystem.readAsStringAsync(FileSystem.documentDirectory + 'photo83.jpg', { encoding: FileSystem.EncodingType.Base64 });
-          setPhoto83(`data:image/jpg;base64,${photo83Base64}`);
+        if (photo2Uri.exists) {
+          const photo2Base64 = await FileSystem.readAsStringAsync(FileSystem.documentDirectory + 'photo2.jpg', { encoding: FileSystem.EncodingType.Base64 });
+          setPhoto2(`data:image/jpg;base64,${photo2Base64}`);
         }
+
+        
 
       } catch (error) {
         console.error('Error reading photos:', error);
@@ -54,7 +57,8 @@ export default function CVerde3({ showCamera, setShowCamera }) {
         skipProcessing: true,
         quality: 0.10,
         width: 371,
-        height: 595
+        height: 595,
+        exif: true,
        });
       return photo.base64;
     }
@@ -65,20 +69,20 @@ export default function CVerde3({ showCamera, setShowCamera }) {
 
 
   const handleTakePhoto = async () => {
-    if (!photo73) {
+    if (!photo1) {
       const photoBase64 = await takePicture();
       if (photoBase64) {
-        const photoUri = `${FileSystem.documentDirectory}photo73.jpg`;
+        const photoUri = `${FileSystem.documentDirectory}photo1.jpg`;
         await FileSystem.writeAsStringAsync(photoUri, photoBase64, { encoding: FileSystem.EncodingType.Base64 });
-        setPhoto73(`data:image/jpg;base64,${photoBase64}`);
+        setPhoto1(`data:image/jpg;base64,${photoBase64}`);
         setCurrentPhoto(`data:image/jpg;base64,${photoBase64}`);
       }
-    } else if (!photo83) {
+    } else if (!photo2) {
       const photoBase64 = await takePicture();
       if (photoBase64) {
-        const photoUri = `${FileSystem.documentDirectory}photo83.jpg`;
+        const photoUri = `${FileSystem.documentDirectory}photo2.jpg`;
         await FileSystem.writeAsStringAsync(photoUri, photoBase64, { encoding: FileSystem.EncodingType.Base64 });
-        setPhoto83(`data:image/jpg;base64,${photoBase64}`);
+        setPhoto2(`data:image/jpg;base64,${photoBase64}`);
         setCurrentPhoto(`data:image/jpg;base64,${photoBase64}`);
       }
       setShowCamera(false);
@@ -97,11 +101,14 @@ export default function CVerde3({ showCamera, setShowCamera }) {
 
 
 
-const delante =async () => {
-    await FileSystem.deleteAsync(FileSystem.documentDirectory + 'photo73.jpg');
-    setPhoto73(null);
-    setCurrentPhoto(photo83 ? photo83 : null);
+  const delante =async () => {
+    await FileSystem.deleteAsync(FileSystem.documentDirectory + 'photo1.jpg');
+    setPhoto1(null);
+    setCurrentPhoto(photo2 ? photo2 : null);
 }
+
+
+
 
 
 const handleDeletePhoto = async () => {
@@ -117,11 +124,11 @@ const handleDeletePhoto = async () => {
         text: 'Eliminar',
         style: 'destructive',
         onPress: async () => {
-            await FileSystem.deleteAsync(FileSystem.documentDirectory + 'photo73.jpg');
-            setPhoto73(null);
+            await FileSystem.deleteAsync(FileSystem.documentDirectory + 'photo1.jpg');
+            setPhoto1(null);
             setCurrentPhoto(null);
-            await FileSystem.deleteAsync(FileSystem.documentDirectory + 'photo83.jpg');
-            setPhoto83(null);
+            await FileSystem.deleteAsync(FileSystem.documentDirectory + 'photo2.jpg');
+            setPhoto2(null);
             setCurrentPhoto(null);
         },
       },
@@ -134,16 +141,16 @@ const handleDeletePhoto = async () => {
 
 
 
+
   return (
     <View style={styles.container}>
 
       {showCamera ? (
         <>
-         
-         <View style={styles.ayudaContainer}>     
+         <View style={styles.ayudaContainer}>
    
-   {!photo73 ? (
-    <>
+   {!photo1 ? (
+      <>
       <TouchableOpacity 
     onPress={() => setShowCamera(false)}  >
         <Ionicons name="chevron-back-circle-outline" size={30} color="#000000" />
@@ -161,12 +168,13 @@ const handleDeletePhoto = async () => {
         <Text style={styles.textAyuda}>Y ahora la parte de ATRÁS </Text>
         </>
       )}
-       </View>
+      </View>
         <CameraView
           style={styles.camera}
           facing={facing}
           ref={cameraRef}
           onCameraReady={() => setCameraReady(true)}
+          useCamera2Api={Platform.OS === 'android'}
         >
         <View style={styles.rectangleN} />
          
@@ -196,19 +204,22 @@ const handleDeletePhoto = async () => {
           {currentPhoto ? (
             <>
              <>
-             <Text style={styles.super2}>Cedula Verde 3</Text>
+
+             <Text style={styles.super2}>Habilitacion 1</Text>
              <Text style={styles.textAyuda2}>toca la imagen para ver el dorso 🔄 </Text>
              </>
             <>
-             <TouchableOpacity onPress={() => setCurrentPhoto(currentPhoto === photo73 ? photo83 : photo73)}>
+             <TouchableOpacity onPress={() => setCurrentPhoto(currentPhoto === photo1 ? photo2 : photo1)}>
               <Image source={{ uri: currentPhoto }} style={styles.image} />
             </TouchableOpacity>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10,marginBottom:-70 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10,marginBottom:-10 }}>
             <Button title="Eliminar" onPress={handleDeletePhoto} />
+            
             <EnviarPdf1
-     photo1={photo73}
-     photo2={photo83}
+     photo1={photo1}
+     photo2={photo2}
      />
+  
             </View>
             </>
             </>
@@ -216,7 +227,7 @@ const handleDeletePhoto = async () => {
           ) : (
             <>
              <View style={styles.ayudaContainer2}>
-             <Text style={styles.super2}>Cedula Verde 3</Text>
+             <Text style={styles.super2}>Habilitacion 1</Text>
              <Text style={styles.textAyuda2}>Busca un lugar iluminado para que la foto salga bien ✨ </Text>
              </View>
             <>
@@ -242,7 +253,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop:-50
   },
   agregar: {
     position: 'absolute',
@@ -315,7 +325,6 @@ const styles = StyleSheet.create({
   },
   super1:{
     fontSize: 25,
-    
   },
   textAyuda: {
     justifyContent: 'center',
@@ -324,26 +333,23 @@ const styles = StyleSheet.create({
   },
   super2:{
     fontSize: Platform.OS === 'android' ? 18 :25,
-marginTop: Platform.OS === 'android' ? 50 :-80,
+marginTop: Platform.OS === 'android' ? 50 :-30,
   },
   textAyuda2: {
     justifyContent: 'center',
-    fontSize:Platform.OS === 'android' ? 11 :13,
+    fontSize:Platform.OS === 'android' ? 11 :16,
    color: "#424242",
-   marginBottom: 10,
+   marginBottom: 12
   },
   ayudaContainer:{
     marginTop:-10,
     marginBottom:60,
     width:350,
-    
-
   },
   ayudaContainer2:{
-    marginTop:-510,
+    marginTop:-550,
     marginBottom:65,
     width:"90%",
-    height:200,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -356,11 +362,11 @@ marginTop: Platform.OS === 'android' ? 50 :-80,
   image: {
      width: Platform.OS === 'android' ? 345: 395,
     height: Platform.OS === 'android' ? 504:594,
-    resizeMode: Platform.OS === 'ios' ? 'contain':'auto',
+    resizeMode: Platform.OS === 'ios' ? 'contain':'',
     borderWidth: 8,
     borderColor: "#e9eaee",
     borderRadius: 24,
-  transform: Platform.OS === 'android' ?[{ rotate: '0deg' }]:'auto',
+  transform: Platform.OS === 'android' ?[{ rotate: '0deg' }]:'',
     marginVertical:Platform.OS === 'android' ? 10 : '',
   },
   volver: {
@@ -370,4 +376,3 @@ marginTop: Platform.OS === 'android' ? 50 :-80,
     marginLeft:"-85%",
   },
 });
-

@@ -46,14 +46,4 @@ def expoCameraMavenPath = new File(["node", "--print", "require.resolve('expo-ca
 allprojects { repositories { maven { url(expoCameraMavenPath) } } }
 // @generated end expo-camera-import
 
-android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
 
-    defaultConfig {
-        applicationId "com.cardpy.kuatia" // Configura tu ID único
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1 // Incrementa este número con cada nueva versión
-        versionName "1.0.0" // Actualiza según el esquema de versionado de tu app
-    }
-}
