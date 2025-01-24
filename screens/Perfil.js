@@ -5,6 +5,7 @@ import {auth} from "../firebaseConfig";
 import * as FileSystem from 'expo-file-system';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 
 export default function Perfil () {
@@ -15,33 +16,39 @@ export default function Perfil () {
  // const auth = getAuth();
  const [name, setName] = useState('');
  const [photo, setPhoto] = useState('');
+ const [email, setEmail] = useState('');
+
 
  useEffect(() => {
-   const fetchData = async () => {
-     try {
-       const storedName = await AsyncStorage.getItem('nombre');
-       const storedPhoto = await AsyncStorage.getItem('foto');
-       if (storedName !== null) {
-         setName(storedName);
-       }
-       if (storedPhoto !== null) {
-         setPhoto(storedPhoto);
-       }
-     } catch (error) {
-       console.error('Failed to load data from AsyncStorage', error);
-     }
-   };
+  const fetchData = async () => {
+    try {
+      const storedName = await AsyncStorage.getItem('nombre');
+      const storedPhoto = await AsyncStorage.getItem('foto');
+      const storedEmail = await AsyncStorage.getItem('email');
 
-   fetchData();
- }, []);
+      if (storedName !== null) {
+        setName(storedName);
+      }
+      if (storedPhoto !== null) {
+        setPhoto(storedPhoto);
+      }
+      if (storedEmail !== null) {
+        setEmail(storedEmail); // Asegúrate de tener setEmail definido
+      }
+    } catch (error) {
+      console.error('Failed to load data from AsyncStorage', error);
+    }
+  };
+
+  fetchData();
+}, []);
+
 
 
  const handleLogout = async () => {
-
-
   Alert.alert(
     'Cerrar Sesión',
-    '¿Estás seguro/a que quiere cerrar la sesión?',
+    '¿Estás seguro/a que quieres cerrar la sesión?',
     [
       {
         text: 'Cancelar',
@@ -51,46 +58,51 @@ export default function Perfil () {
         text: 'Cerrar',
         style: 'destructive',
         onPress: async () => {
+          try {
+            const user = auth.currentUser;
+            if (user) {
+              // Identificar proveedor de inicio de sesión
+              const providerId = user.providerData[0]?.providerId;
 
-          //const userData = await AsyncStorage.getItem('user');
-   //console.log("User logged in memory!", userData);
-   
-    
-       await auth.signOut().then(() => {
-        console.log("se cerro sesion");
-        
-     }); 
+              if (providerId === 'apple.com') {
+                console.log('Cerrando sesión de Apple');
+                // Aquí puedes realizar acciones específicas para Apple Sign-In si es necesario
+              }
 
-     // Limpiar filesystem
- // Leer todos los archivos del directorio
- const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
+              // Cerrar sesión de Firebase
+              await auth.signOut();
+              console.log('Sesión cerrada');
 
- // Filtrar los archivos que comienzan con "photo"
- const photoFiles = files.filter(file => file.startsWith('photo'));
+              // Limpiar archivos y AsyncStorage
+              const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
+              const photoFiles = files.filter(file => file.startsWith('photo'));
+              await Promise.all(
+                photoFiles.map(file =>
+                  FileSystem.deleteAsync(`${FileSystem.documentDirectory}${file}`)
+                )
+              );
 
- // Eliminar todos los archivos de manera simultánea
- await Promise.all(
-   photoFiles.map(file =>
-     FileSystem.deleteAsync(`${FileSystem.documentDirectory}${file}`)
-   )
- );
-     //limpiar asyncstorage
+              await AsyncStorage.removeItem('user');
+              await AsyncStorage.removeItem('nombre');
+              await AsyncStorage.removeItem('foto');
+              await AsyncStorage.removeItem('email');
+              console.log('Datos eliminados de AsyncStorage');
 
-     await AsyncStorage.removeItem('user');
-     await AsyncStorage.removeItem('nombre');
-     await AsyncStorage.removeItem('foto');
-     console.log('Usuario eliminado de AsyncStorage');
-     navigation.navigate("Login")
-
-          
+              navigation.navigate('Login');
+            } else {
+              console.error('No hay usuario autenticado');
+            }
+          } catch (error) {
+            console.error('Error al cerrar sesión:', error);
+            Alert.alert('Error', 'No se pudo cerrar la sesión. Intenta nuevamente.');
+          }
         },
       },
     ],
     { cancelable: false }
   );
-
-
 };
+
 
 
 
@@ -127,36 +139,42 @@ const handleDeleteAccount = () => {
         style: 'destructive',
         onPress: async () => {
           try {
-            // Eliminar la cuenta desde Firebase
+            // Obtener el usuario actual de Firebase
             const user = auth.currentUser;
             if (user) {
+              // Verificar si el usuario está autenticado con Apple
+              const providerData = user.providerData;
+              const isAppleUser = providerData.some(
+                (provider) => provider.providerId === 'apple.com'
+              );
+/*
+              if (isAppleUser) {
+                // Opcional: Informar al usuario sobre el impacto en su cuenta de Apple
+                console.log('El usuario está autenticado con Apple.');
+              } */
+
+              // Eliminar la cuenta desde Firebase
               await user.delete();
               console.log('Cuenta eliminada de Firebase');
 
               // Limpiar AsyncStorage
-              await AsyncStorage.removeItem('user');
-              await AsyncStorage.removeItem('nombre');
-              await AsyncStorage.removeItem('foto');
+              await AsyncStorage.multiRemove([
+                'user',
+                'nombre',
+                'foto',
+                'email',
+              ]);
               console.log('Datos eliminados de AsyncStorage');
 
-              // Limpiar filesystem
-              
-// Leer todos los archivos del directorio
- const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
-
- // Filtrar los archivos que comienzan con "photo"
- const photoFiles = files.filter(file => file.startsWith('photo'));
-
- // Eliminar todos los archivos de manera simultánea
- await Promise.all(
-   photoFiles.map(file =>
-     FileSystem.deleteAsync(`${FileSystem.documentDirectory}${file}`)
-   )
- );
-
-
-
-
+              // Limpiar filesystem (eliminar fotos guardadas localmente)
+              const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
+              const photoFiles = files.filter((file) => file.startsWith('photo'));
+              await Promise.all(
+                photoFiles.map((file) =>
+                  FileSystem.deleteAsync(`${FileSystem.documentDirectory}${file}`)
+                )
+              );
+           //   console.log('Archivos eliminados del sistema de archivos');
 
               // Navegar a la pantalla de inicio de sesión
               navigation.navigate('Login');
@@ -165,6 +183,8 @@ const handleDeleteAccount = () => {
             }
           } catch (error) {
             console.error('Error al eliminar la cuenta:', error);
+
+            // Mostrar mensaje de error al usuario
             Alert.alert(
               'Error',
               'No se pudo eliminar la cuenta. Por favor, vuelve a iniciar sesión para intentarlo nuevamente.'
@@ -179,14 +199,17 @@ const handleDeleteAccount = () => {
 
 
 
+
   return (
     <View style={styles.container}>
       {photo ? (
         <Image source={{ uri: photo }} style={styles.image} />
       ) : (
-        <Text style={styles.text}>No hay foto disponible</Text>
+        <View style={[styles.avatarContainer, styles.image]}>
+    <FontAwesome6 name="user-large" size={50} color="#888" />
+  </View>
       )}
-      <Text style={styles.super}>{name}</Text>
+     <Text style={styles.super}>{name || email}</Text>
       <Text style={styles.robot}>Nuestros Robots estan trabajando incanzablemente para mejorar esta pantalla con tus datos y mas opciones&#x2699;&#x1F916;</Text>
       <Text style={styles.link} onPress={() => setModalVisible(true)}>Términos de Servicio</Text>
       <Text style={styles.link} onPress={() => setModalVisible2(true)}>Declaración de privacidad</Text>
@@ -297,7 +320,11 @@ const styles = StyleSheet.create({
     paddingTop: 90,
    // paddingLeft: 20
   },
-  
+  avatarContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
+  },
   text:{
     fontWeight: 'bold',
     color: "#424242"

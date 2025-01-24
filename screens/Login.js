@@ -85,6 +85,14 @@ export default function Login() {
 
 
   const handleAppleSignIn = async () => {
+    if (!checked) {
+      Alert.alert(
+        "Aceptar términos",
+        "Debes aceptar los Términos de Servicio antes de iniciar sesión."
+      );
+      return;
+    }
+  
     try {
       const appleCredential = await AppleAuthentication.signInAsync({
         requestedScopes: [
@@ -92,29 +100,27 @@ export default function Login() {
           AppleAuthentication.AppleAuthenticationScope.EMAIL,
         ],
       });
-
+  
       // Crear una credencial de Firebase con el token de Apple
-      const provider = new OAuthProvider('apple.com');
+      const provider = new OAuthProvider("apple.com");
       const credential = provider.credential({
         idToken: appleCredential.identityToken,
       });
-
-          
+  
       // Iniciar sesión con Firebase
       const result = await signInWithCredential(auth, credential);
-      const uid = user.uid;
-          const nombre = user.displayName;
-          const foto = user.photoURL;
-         await AsyncStorage.setItem("user",(uid));
-         await AsyncStorage.setItem("nombre",(nombre));
-         await AsyncStorage.setItem("foto",(foto));
-
-      console.log('Usuario autenticado:', result.user);
-      navigation.replace( "Inicio")
+      const { uid, email } = result.user;
+  
+      // Guardar los datos en AsyncStorage
+      await AsyncStorage.setItem("user", uid);
+      await AsyncStorage.setItem("email", email);
+  
+      navigation.replace("Inicio");
     } catch (error) {
-      console.error('Error durante la autenticación:', error);
+      console.error("Error durante la autenticación:", error);
     }
   };
+  
  
 
 
