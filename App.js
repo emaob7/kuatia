@@ -48,9 +48,9 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen name="Vehiculo1" component={Vehiculo1} options={{ title: '🚗 Vehiculo 1' }}/>
-        <Stack.Screen name="Vehiculo2" component={Vehiculo2} options={{ title: '🚚 Vehiculo 2' }}/>
-        <Stack.Screen name="Vehiculo3" component={Vehiculo3} options={{ title: '🏍️ Vehiculo 3' }}/>
-        <Stack.Screen name="Vehiculo4" component={Vehiculo4} options={{ title: '🚌 Vehiculo 4' }}/>
+        <Stack.Screen name="Vehiculo2" component={Vehiculo2} options={{ title: '🏍️ Vehiculo 2' }}/>
+        <Stack.Screen name="Vehiculo3" component={Vehiculo3} options={{ title: '🚗🏍️ Vehiculo 3' }}/>
+        <Stack.Screen name="Vehiculo4" component={Vehiculo4} options={{ title: '🚗🏍️ Vehiculo 4' }}/>
         <Stack.Screen name="Cuenta" component={Perfil} />
       </Stack.Navigator>
     </NavigationContainer>

@@ -3,10 +3,14 @@
     "name": "kuatia",
     "slug": "kuatia",
     "version": "1.0.0",
-    "permissions": ["WRITE_EXTERNAL_STORAGE", "READ_EXTERNAL_STORAGE"],
+    "permissions": [
+      "WRITE_EXTERNAL_STORAGE",
+      "READ_EXTERNAL_STORAGE"
+    ],
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "newArchEnabled": false,
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -16,7 +20,10 @@
       "googleServicesFile": "./google-services.json",
       "package": "com.cardpy.kuatia",
       "versionCode": 1,
-      "permissions": ["WRITE_EXTERNAL_STORAGE", "READ_EXTERNAL_STORAGE"], 
+      "permissions": [
+        "WRITE_EXTERNAL_STORAGE",
+        "READ_EXTERNAL_STORAGE"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -25,25 +32,32 @@
     "ios": {
       "googleServicesFile": "./GoogleService-Info.plist",
       "bundleIdentifier": "com.cardpy.kuatia",
-      "supportsTablet": true,
-      "buildNumber": "1" 
+      "supportsTablet": false,
+      "buildNumber": "1",
+      "usesAppleSignIn": true,
+      "newArchEnabled": false,
+      "appleTeamId": "T36FC9H864"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
       [
+        "expo-apple-authentication"
+      ],
+      [
+        "@react-native-firebase/app"
+      ],
+      [
+        "@react-native-firebase/auth"
+      ],
+      [
         "expo-dev-launcher",
         {
           "launchMode": "most-recent"
         }
       ],
-      [
-        "react-native-vision-camera",
-        {
-          "cameraPermissionText": "$(PRODUCT_NAME) needs access to your Camera."
-        }
-      ]
+      "expo-build-properties"
     ],
     "extra": {
       "eas": {

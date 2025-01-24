@@ -46,7 +46,7 @@ export default function Inicio() {
           style={styles.card}
           onPress={() => navigation.navigate('Vehiculo2')}
         >
-          <Text style={styles.emoji}>🚚</Text>
+          <Text style={styles.emoji}>🏍️</Text>
           <Text style={styles.cardText}>Vehículo 2</Text>
         </TouchableOpacity>
 
@@ -54,7 +54,7 @@ export default function Inicio() {
           style={styles.card}
           onPress={() => navigation.navigate('Vehiculo3')}
         >
-          <Text style={styles.emoji}>🏍️</Text>
+          <Text style={styles.emoji}>🚗🏍️</Text>
           <Text style={styles.cardText}>Vehículo 3</Text>
         </TouchableOpacity>
 
@@ -62,7 +62,7 @@ export default function Inicio() {
           style={styles.card}
           onPress={() => navigation.navigate('Vehiculo4')}
         >
-          <Text style={styles.emoji}>🚌</Text>
+          <Text style={styles.emoji}>🚗🏍️</Text>
           <Text style={styles.cardText}>Vehículo 4</Text>
         </TouchableOpacity>
       </View>

@@ -2,6 +2,7 @@ import React, { useEffect,useState} from 'react';
 import { View, Text, TouchableOpacity,StyleSheet, Button, Modal, ScrollView, Image,Alert } from 'react-native';
 import {auth} from "../firebaseConfig";
 //import {getAuth} from 'firebase/auth';
+import * as FileSystem from 'expo-file-system';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
@@ -60,6 +61,21 @@ export default function Perfil () {
         
      }); 
 
+     // Limpiar filesystem
+ // Leer todos los archivos del directorio
+ const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
+
+ // Filtrar los archivos que comienzan con "photo"
+ const photoFiles = files.filter(file => file.startsWith('photo'));
+
+ // Eliminar todos los archivos de manera simultánea
+ await Promise.all(
+   photoFiles.map(file =>
+     FileSystem.deleteAsync(`${FileSystem.documentDirectory}${file}`)
+   )
+ );
+     //limpiar asyncstorage
+
      await AsyncStorage.removeItem('user');
      await AsyncStorage.removeItem('nombre');
      await AsyncStorage.removeItem('foto');
@@ -75,6 +91,8 @@ export default function Perfil () {
 
 
 };
+
+
 
 
 /*
@@ -98,6 +116,69 @@ const handleLogout = async() => {
 
 */
   
+const handleDeleteAccount = () => {
+  Alert.alert(
+    'Eliminar Cuenta',
+    '¿Estás seguro/a que quieres eliminar tu cuenta? Esta acción no se puede deshacer.',
+    [
+      { text: 'Cancelar', style: 'cancel' },
+      {
+        text: 'Eliminar',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            // Eliminar la cuenta desde Firebase
+            const user = auth.currentUser;
+            if (user) {
+              await user.delete();
+              console.log('Cuenta eliminada de Firebase');
+
+              // Limpiar AsyncStorage
+              await AsyncStorage.removeItem('user');
+              await AsyncStorage.removeItem('nombre');
+              await AsyncStorage.removeItem('foto');
+              console.log('Datos eliminados de AsyncStorage');
+
+              // Limpiar filesystem
+              
+// Leer todos los archivos del directorio
+ const files = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
+
+ // Filtrar los archivos que comienzan con "photo"
+ const photoFiles = files.filter(file => file.startsWith('photo'));
+
+ // Eliminar todos los archivos de manera simultánea
+ await Promise.all(
+   photoFiles.map(file =>
+     FileSystem.deleteAsync(`${FileSystem.documentDirectory}${file}`)
+   )
+ );
+
+
+
+
+
+              // Navegar a la pantalla de inicio de sesión
+              navigation.navigate('Login');
+            } else {
+              console.error('No hay un usuario autenticado');
+            }
+          } catch (error) {
+            console.error('Error al eliminar la cuenta:', error);
+            Alert.alert(
+              'Error',
+              'No se pudo eliminar la cuenta. Por favor, vuelve a iniciar sesión para intentarlo nuevamente.'
+            );
+          }
+        },
+      },
+    ],
+    { cancelable: false }
+  );
+};
+
+
+
   return (
     <View style={styles.container}>
       {photo ? (
@@ -109,9 +190,11 @@ const handleLogout = async() => {
       <Text style={styles.robot}>Nuestros Robots estan trabajando incanzablemente para mejorar esta pantalla con tus datos y mas opciones&#x2699;&#x1F916;</Text>
       <Text style={styles.link} onPress={() => setModalVisible(true)}>Términos de Servicio</Text>
       <Text style={styles.link} onPress={() => setModalVisible2(true)}>Declaración de privacidad</Text>
+      <Text style={styles.link2} onPress={handleDeleteAccount}>Eliminar Cuenta de Kuatia</Text>
       <TouchableOpacity style={styles.button} onPress={handleLogout}>
       <Text style={styles.textButton}>Cerrar Sesión</Text>
       </TouchableOpacity>
+
 
       <Modal
         animationType="slide"
@@ -200,6 +283,7 @@ const handleLogout = async() => {
           </View>
         </View>
       </Modal>
+
     </View>
   );
 };
@@ -223,27 +307,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: "#FFFFFF"
   },
-
+ 
+  
   button: {
     justifyContent: 'space-evenly',
     alignItems: 'center',
     backgroundColor: "#1462fc",
     paddingHorizontal: 17,
-    marginTop:20,
+    marginTop:40,
     borderRadius:10,
     height:40,
     width:150,
    // marginLeft: -20
   },
-  buttonC: {
-    justifyContent: 'space-evenly',
-    flexDirection: 'column',
-    alignItems: 'center',
-    marginTop:30,
-    height:40,
-    width:250,
-    marginLeft: -20
-  },
+
   buttonContent:{
     alignItems:"center",
     marginBottom:38,
@@ -277,6 +354,11 @@ const styles = StyleSheet.create({
   },
   link: {
     color: 'blue',
+    marginVertical:8
+   // textDecorationLine: 'underline',
+  },
+  link2: {
+    color: 'red',
     marginVertical:8
    // textDecorationLine: 'underline',
   },

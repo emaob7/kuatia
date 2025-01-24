@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Button, StyleSheet, Modal, ScrollView, View,Text, Image,Pressable } from 'react-native';
+import {Button, StyleSheet, Modal, ScrollView, View,Text, Image,Pressable, Alert } from 'react-native';
 //import { StyleSheet, View, TextInput,Text,TouchableOpacity, Image,Pressable } from 'react-native';
 //import { signInWithEmailAndPassword } from "firebase/auth";
 import {
@@ -7,7 +7,8 @@ import {
   onAuthStateChanged,
   signInWithCredential,
 } from "firebase/auth";
-import {getAuth} from 'firebase/auth';
+import * as AppleAuthentication from 'expo-apple-authentication';
+import { getAuth, OAuthProvider } from 'firebase/auth';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as WebBrowser from "expo-web-browser";
@@ -82,6 +83,38 @@ export default function Login() {
   }
   
 
+
+  const handleAppleSignIn = async () => {
+    try {
+      const appleCredential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+
+      // Crear una credencial de Firebase con el token de Apple
+      const provider = new OAuthProvider('apple.com');
+      const credential = provider.credential({
+        idToken: appleCredential.identityToken,
+      });
+
+          
+      // Iniciar sesión con Firebase
+      const result = await signInWithCredential(auth, credential);
+      const uid = user.uid;
+          const nombre = user.displayName;
+          const foto = user.photoURL;
+         await AsyncStorage.setItem("user",(uid));
+         await AsyncStorage.setItem("nombre",(nombre));
+         await AsyncStorage.setItem("foto",(foto));
+
+      console.log('Usuario autenticado:', result.user);
+      navigation.replace( "Inicio")
+    } catch (error) {
+      console.error('Error durante la autenticación:', error);
+    }
+  };
  
 
 
@@ -132,6 +165,16 @@ export default function Login() {
         promptAsync={promptAsync}
         checked={checked}
          />
+
+<AppleAuthentication.AppleAuthenticationButton
+        buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+        buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+        cornerRadius={5}
+        style={{ width: 200, height: 44 }}
+        onPress={handleAppleSignIn}
+      />
+
+      
         
         <View style={styles.checkboxContainer}>
         <Pressable
