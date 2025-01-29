@@ -36,7 +36,10 @@
       "buildNumber": "1",
       "usesAppleSignIn": true,
       "newArchEnabled": false,
-      "appleTeamId": "T36FC9H864"
+      "appleTeamId": "T36FC9H864",
+      "infoPlist": {
+        "UISupportedDevices": ["iPhone"]
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -68,7 +71,7 @@
     "owner": "cardpy7"
   },
   "react-native-google-mobile-ads": {
-    "android_app_id": "ca-app-pub-4622872693950947~9382285867",
-    "ios_app_id": "ca-app-pub-4622872693950947~1714714682"
+    "android_app_id": "ca-app-pub-4622872693950947~5049209369",
+    "ios_app_id": "ca-app-pub-4622872693950947~4445739980"
   }
 }

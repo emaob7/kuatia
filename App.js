@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // Iconos de Expo
+//import { TouchableOpacity } from 'react-native';
+//import { Ionicons } from '@expo/vector-icons'; // Iconos de Expo
 import MyTabs from './MyTabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from './screens/Login';

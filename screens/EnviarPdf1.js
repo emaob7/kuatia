@@ -12,28 +12,34 @@ const EnviarPdf1 = ({ photo1, photo2 }) => {
   const [isLoading, setIsLoading] = useState(false); // Estado para el loader
 
   useEffect(() => {
-    const interstitialAd = InterstitialAd.createForAdRequest(TestIds.INTERSTITIAL, {
+    const adUnitId =
+      Platform.OS === 'ios'
+        ? 'ca-app-pub-4622872693950947/5558112307' // Reemplaza con tu ID de iOS
+        : 'ca-app-pub-4622872693950947/1752128031'; // Reemplaza con tu ID de Android
+  
+    const interstitialAd = InterstitialAd.createForAdRequest(adUnitId, {
       requestNonPersonalizedAdsOnly: true,
       keywords: ['fashion', 'clothing'],
     });
-
+  
     const onAdLoaded = () => {
       setIsAdLoaded(true);
     };
     const onAdClosed = () => {
       generatePDF();
     };
-
+  
     interstitialAd.addAdEventListener(AdEventType.LOADED, onAdLoaded);
     interstitialAd.addAdEventListener(AdEventType.CLOSED, onAdClosed);
     interstitialAd.load();
-
+  
     setInterstitial(interstitialAd);
-
+  
     return () => {
       interstitialAd.removeAllListeners();
     };
   }, []);
+  
 
   const showInterstitialAd = () => {
     if (!photo1 || !photo2) {

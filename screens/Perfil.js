@@ -421,13 +421,15 @@ const styles = StyleSheet.create({
   },
   robot: {
     marginBottom: 16,
+    marginHorizontal:25
   },
   super: {
     fontSize: 27,
     marginTop:-28,
     fontWeight: 'bold',
     marginLeft: -20,
-    marginBottom:50
+    marginBottom:50,
+    padding:10,
     
   },
   image: {

@@ -2286,6 +2286,7 @@ DEPENDENCIES:
   - Firebase/Auth
   - Firebase/Core
   - Firebase/Messaging
+  - FirebaseCoreInternal
   - fmt (from `../node_modules/react-native/third-party-podspecs/fmt.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - GoogleUtilities
@@ -2725,6 +2726,6 @@ SPEC CHECKSUMS:
   Yoga: c597d2c0803c51f27569fb69f05eeb76646c0074
   ZXingObjC: 8898711ab495761b2dbbdec76d90164a6d7e14c5
 
-PODFILE CHECKSUM: 6db6a87aff91ccb52af10f0375393fc380b1ff6e
+PODFILE CHECKSUM: 9f696639af8a5225c0c2e71ef1e95bcfa0ff67fe
 
 COCOAPODS: 1.16.2

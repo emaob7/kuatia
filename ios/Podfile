@@ -39,6 +39,7 @@ target 'kuatia' do
   pod 'Firebase/Auth', :modular_headers => true
   pod 'Firebase/Core', :modular_headers => true
   pod 'Firebase/Messaging', :modular_headers => true
+  pod 'FirebaseCoreInternal', :modular_headers => true
 
   #use_frameworks! :linkage => podfile_properties['ios.useFrameworks'].to_sym if podfile_properties['ios.useFrameworks']
   #use_frameworks! :linkage => ENV['USE_FRAMEWORKS'].to_sym if ENV['USE_FRAMEWORKS']
