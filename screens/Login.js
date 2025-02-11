@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {Button, StyleSheet, Modal, ScrollView, View,Text, Image,Pressable, Alert } from 'react-native';
+import {Button, StyleSheet, Modal, ScrollView, View,Text, Image,Pressable, Alert, Platform } from 'react-native';
 //import { StyleSheet, View, TextInput,Text,TouchableOpacity, Image,Pressable } from 'react-native';
 //import { signInWithEmailAndPassword } from "firebase/auth";
 import {
@@ -172,14 +172,15 @@ export default function Login() {
         checked={checked}
          />
 
-<AppleAuthentication.AppleAuthenticationButton
-        buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
-        buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
-        cornerRadius={5}
-        style={{ width: 200, height: 44 }}
-        onPress={handleAppleSignIn}
-      />
-
+{Platform.OS === 'ios' && (
+  <AppleAuthentication.AppleAuthenticationButton
+    buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+    buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+    cornerRadius={5}
+    style={{ width: 200, height: 44 }}
+    onPress={handleAppleSignIn}
+  />
+)}
       
         
         <View style={styles.checkboxContainer}>

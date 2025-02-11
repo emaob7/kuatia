@@ -324,6 +324,10 @@ const styles = StyleSheet.create({
     fontSize: Platform.OS === 'android' ? 18 :25,
 marginTop: Platform.OS === 'android' ? 50 :-80,
   },
+  super3:{
+    fontSize: Platform.OS === 'android' ? 18 :25,
+marginTop: Platform.OS === 'android' ? -70 :-80,
+  },
   textAyuda2: {
     justifyContent: 'center',
     fontSize:Platform.OS === 'android' ? 11 :13,

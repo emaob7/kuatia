@@ -38,7 +38,8 @@
       "newArchEnabled": false,
       "appleTeamId": "T36FC9H864",
       "infoPlist": {
-        "UISupportedDevices": ["iPhone"]
+        "UISupportedDevices": ["iPhone"],
+    "NSCameraUsageDescription": "Necesitamos acceso a la cámara para tomar fotos."
       }
     },
     "web": {
@@ -58,6 +59,13 @@
         "expo-dev-launcher",
         {
           "launchMode": "most-recent"
+        }
+      ],
+      [
+        "react-native-vision-camera",
+        {
+          "cameraPermissionText": "$(PRODUCT_NAME) needs access to your Camera."
+  
         }
       ],
       "expo-build-properties"

@@ -195,7 +195,7 @@ const handleDeletePhoto = async () => {
           {currentPhoto ? (
             <>
              <>
-             <Text style={styles.super2}>Licencia 1</Text>
+             <Text style={styles.super3}>Licencia 1</Text>
              <Text style={styles.textAyuda2}>toca la imagen para ver el dorso 🔄 </Text>
              </>
             <>
@@ -324,6 +324,10 @@ const styles = StyleSheet.create({
   super2:{
     fontSize: Platform.OS === 'android' ? 18 :25,
 marginTop: Platform.OS === 'android' ? 50 :-80,
+  },
+  super3:{
+    fontSize: Platform.OS === 'android' ? 18 :25,
+marginTop: Platform.OS === 'android' ? -70 :-80,
   },
   textAyuda2: {
     justifyContent: 'center',

@@ -205,7 +205,7 @@ const handleDeletePhoto = async () => {
             <>
              <>
 
-             <Text style={styles.super2}>Habilitacion 1</Text>
+             <Text style={styles.super3}>Habilitacion 1</Text>
              <Text style={styles.textAyuda2}>toca la imagen para ver el dorso 🔄 </Text>
              </>
             <>
@@ -337,6 +337,10 @@ const styles = StyleSheet.create({
     fontSize: Platform.OS === 'android' ? 18 :25,
 marginTop: Platform.OS === 'android' ? 50 :-80,
   },
+  super3:{
+    fontSize: Platform.OS === 'android' ? 18 :25,
+marginTop: Platform.OS === 'android' ? -70 :-80,
+  },
   textAyuda2: {
     justifyContent: 'center',
     fontSize:Platform.OS === 'android' ? 11 :13,
@@ -362,7 +366,6 @@ marginTop: Platform.OS === 'android' ? 50 :-80,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    
 
   },
   image: {

@@ -13,6 +13,7 @@ import Vehiculo2 from './screens/Vehiculo2';
 import Vehiculo3 from './screens/Vehiculo3';
 import Vehiculo4 from './screens/Vehiculo4';
 import Perfil from './screens/Perfil';
+import Carnet from './screens/Carnet';
 
 
 LogBox.ignoreLogs(['Sending `onAnimatedValueUpdate` with no listeners registered.']);
@@ -47,10 +48,12 @@ export default function App() {
           component={Inicio} 
           options={{ headerShown: false }}
         />
+        
         <Stack.Screen name="Vehiculo1" component={Vehiculo1} options={{ title: '🚗 Vehiculo 1' }}/>
         <Stack.Screen name="Vehiculo2" component={Vehiculo2} options={{ title: '🏍️ Vehiculo 2' }}/>
         <Stack.Screen name="Vehiculo3" component={Vehiculo3} options={{ title: '🚗🏍️ Vehiculo 3' }}/>
         <Stack.Screen name="Vehiculo4" component={Vehiculo4} options={{ title: '🚗🏍️ Vehiculo 4' }}/>
+        <Stack.Screen name="Carnet" component={Carnet} options={{ title: 'Carnet' }}/>
         <Stack.Screen name="Cuenta" component={Perfil} />
       </Stack.Navigator>
     </NavigationContainer>

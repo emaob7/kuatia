@@ -65,6 +65,13 @@ export default function Inicio() {
           <Text style={styles.emoji}>🚗🏍️</Text>
           <Text style={styles.cardText}>Vehículo 4</Text>
         </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => navigation.navigate('Carnet')}
+        >
+          <Text style={styles.emoji}>📸</Text>
+          <Text style={styles.cardText}>Carnet</Text>
+        </TouchableOpacity>
       </View>
     </>
   );
