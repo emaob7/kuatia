@@ -60,10 +60,29 @@ function Carnet() {
   };
 
   const deletePhoto = async (index) => {
-    await FileSystem.deleteAsync(`${PHOTO_STORAGE_PATH}${index}.jpg`, { idempotent: true });
-    const newPhotoUris = [...photoUris];
-    newPhotoUris[index] = null;
-    setPhotoUris(newPhotoUris);
+    // Muestra una alerta de confirmación
+    Alert.alert(
+      'Eliminar foto', // Título de la alerta
+      '¿Estás seguro de que quieres eliminar esta foto?', // Mensaje de la alerta
+      [
+        {
+          text: 'Cancelar', // Botón para cancelar
+          style: 'cancel', // Estilo del botón (opcional)
+        },
+        {
+          text: 'Eliminar', // Botón para confirmar
+          onPress: async () => {
+            // Si el usuario confirma, elimina la foto
+            await FileSystem.deleteAsync(`${PHOTO_STORAGE_PATH}${index}.jpg`, { idempotent: true });
+            const newPhotoUris = [...photoUris];
+            newPhotoUris[index] = null;
+            setPhotoUris(newPhotoUris);
+          },
+          style: 'destructive', // Estilo del botón (opcional)
+        },
+      ],
+      { cancelable: true } // Permite cerrar la alerta tocando fuera de ella (opcional)
+    );
   };
 
   const generatePDF = async (index) => {
@@ -77,15 +96,17 @@ function Carnet() {
     });
 
     let imagesHtml = '';
-    for (let i = 0; i < copies[index]; i++) {
-      imagesHtml += `<img src="data:image/jpeg;base64,${base64Image}" style="margin:5px; width:106px; height:121px;" />`;
-    }
+for (let i = 0; i < copies[index]; i++) {
+  imagesHtml += `<img src="data:image/jpeg;base64,${base64Image}" style="width: 106px; height: 121px;" />`; // Sin margen
+}
 
-    const htmlContent = `
-      <html>
-        <body style="display:flex; flex-wrap: wrap;">${imagesHtml}</body>
-      </html>
-    `;
+const htmlContent = `
+  <html>
+    <body style="display: grid; grid-template-columns: repeat(6, 106px); gap: 2px; margin: 0; padding: 20px;">
+      ${imagesHtml}
+    </body>
+  </html>
+`;
 
     const pdfOptions = {
       html: htmlContent,
@@ -105,6 +126,19 @@ function Carnet() {
     }
   };
 
+  const shareJPG = async (index) => {
+    const photoUri = photoUris[index];
+    if (!photoUri) {
+      Alert.alert('Error', 'No hay una foto para compartir.');
+      return;
+    }
+    if (await Sharing.isAvailableAsync()) {
+      await Sharing.shareAsync(photoUri);
+    } else {
+      Alert.alert('Error', 'No se puede compartir la imagen en este dispositivo.');
+    }
+  };
+
   if (!permission || !permission.granted) {
     return (
       <View>
@@ -117,11 +151,23 @@ function Carnet() {
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 20 }}>
       {showCamera ? (
-        <View style={{ position: 'relative', width: '100%', height: 350, justifyContent: 'center', alignItems: 'center', marginTop:40 }}>
+        <View style={{ width: '100%', alignItems: 'center', marginTop: 40 }}>
+          {/* Contenedor con borde y esquinas redondeadas */}
           <View style={{ borderWidth: 4, borderColor: '#2196F3', borderRadius: 10, overflow: 'hidden' }}>
-      <CameraView style={{ width: 300, height: 350 }} ref={cameraRef} />
-    </View>
-          <TouchableOpacity onPress={takePicture} style={{  bottom: -200, backgroundColor: '#2196F3', borderRadius: 50, padding: 35 }}>
+            <CameraView style={{ width: 300, height: 350 }} ref={cameraRef} />
+          </View>
+          {/* Botón para tomar la foto */}
+          <TouchableOpacity
+            onPress={takePicture}
+            style={{
+              marginTop: 20,
+              backgroundColor: '#2196F3',
+              borderRadius: 50,
+              padding: 15,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
             <AntDesign name="camera" size={30} color="white" />
           </TouchableOpacity>
         </View>
@@ -146,39 +192,77 @@ function Carnet() {
                     style={{ width: 150, height: 170, marginRight: 10, borderRadius: 10 }}
                   />
                   <View>
-                    <Text style={{ marginBottom: 5 }}>¿Cuántas necesitas?</Text>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}>
+                    <Text style={{ marginBottom: 10, marginLeft:10 }}>¿Cuántas necesitas?</Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10, marginLeft:10 }}>
                       <TouchableOpacity
                         onPress={() => {
                           const newCopies = [...copies];
                           newCopies[index] = Math.max(1, newCopies[index] - 1);
                           setCopies(newCopies);
                         }}
-                        style={{ padding: 10, backgroundColor: '#ddd', borderRadius: 5 }}
+                        style={{ padding: 10, backgroundColor: '#ddd', borderRadius: 50, marginRight: 10 }}
                       >
-                        <Text style={{ fontSize: 18 }}>-</Text>
+                        <AntDesign name="minus" size={20} color="black" />
                       </TouchableOpacity>
                       <Text style={{ marginHorizontal: 10, fontSize: 16 }}>{copies[index]}</Text>
                       <TouchableOpacity
                         onPress={() => {
                           const newCopies = [...copies];
-                          newCopies[index] = Math.min(8, newCopies[index] + 1);
+                          newCopies[index] = Math.min(6, newCopies[index] + 1);
                           setCopies(newCopies);
                         }}
-                        style={{ padding: 10, backgroundColor: '#ddd', borderRadius: 5 }}
+                        style={{ padding: 10, backgroundColor: '#ddd', borderRadius: 50 }}
                       >
-                        <Text style={{ fontSize: 18 }}>+</Text>
+                        <AntDesign name="plus" size={20} color="black" />
                       </TouchableOpacity>
                     </View>
-                    <Button title="Generar PDF" onPress={() => generatePDF(index)} disabled={!photoUri} />
-                    {photoUri && (
-                      <Button
-                        title="Eliminar Foto"
-                        onPress={() => deletePhoto(index)}
-                        color="red"
-                        style={{ marginTop: 10 }}
-                      />
-                    )}
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop:25 }}>
+  
+    {/* Botón para eliminar foto */}
+    <TouchableOpacity
+    onPress={() => deletePhoto(index)}
+    style={{ 
+     // backgroundColor: '#F44336', 
+      borderRadius: 50, 
+      padding: 12, 
+      alignItems: 'center', 
+      marginHorizontal: 8 
+    }}
+  >
+    <AntDesign name="delete" size={24} color="red" />
+  </TouchableOpacity>
+   {/* Botón para compartir JPG */}
+   <TouchableOpacity
+    onPress={() => shareJPG(index)}
+    style={{ 
+    //  backgroundColor: '#4CAF50', 
+      borderRadius: 50, 
+      padding: 12, 
+      alignItems: 'center', 
+      marginHorizontal: 8 
+    }}
+  >
+    <AntDesign name="jpgfile1" size={24} color="green" />
+  </TouchableOpacity>
+  {/* Botón para generar PDF */}
+  <TouchableOpacity
+    onPress={() => generatePDF(index)}
+    style={{ 
+      backgroundColor: '#2196F3', 
+      borderRadius: 50, 
+      padding: 12, 
+      alignItems: 'center', 
+      marginHorizontal: 8 // Espaciado horizontal entre los botones
+    }}
+  >
+    <AntDesign name="pdffile1" size={24} color="white" />
+  </TouchableOpacity>
+
+ 
+
+
+</View>
+
                   </View>
                 </View>
               )}
