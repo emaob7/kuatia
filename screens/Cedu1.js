@@ -1,24 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Button, Image, TouchableOpacity, StyleSheet, Alert, Platform } from 'react-native';
-import { Camera, CameraView, useCameraPermissions } from 'expo-camera';
+import { Camera, CameraView } from 'expo-camera';
 import * as FileSystem from 'expo-file-system';
 import { Ionicons } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import EnviarPdf1 from './EnviarPdf1';
+import ImageModal from './ImageModal';//
 
 
-export default function Cedu1({ showCamera, setShowCamera }) {
+export default function Habi1({ showCamera, setShowCamera }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraReady, setCameraReady] = useState(false);
- // const [showCamera, setShowCamera] = useState(false);
   const [photo5, setPhoto5] = useState(null);
   const [photo6, setPhoto6] = useState(null);
   const [currentPhoto, setCurrentPhoto] = useState(null);
   const cameraRef = useRef(null);
   const [facing, setFacing] = useState('back');
+  const [modalVisible, setModalVisible] = useState(false);//
+  const [selectedImages, setSelectedImages] = useState([]);
+
+
 
   useEffect(() => {
-    (async () => {
+    (async () => { 
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasPermission(status === 'granted');
     })();
@@ -41,11 +45,19 @@ export default function Cedu1({ showCamera, setShowCamera }) {
           setPhoto6(`data:image/jpg;base64,${photo6Base64}`);
         }
 
+        
+
       } catch (error) {
         console.error('Error reading photos:', error);
       }
     })();
   }, []);
+
+  
+  const openModal = (images) => {
+    setSelectedImages(images);
+    setModalVisible(true);
+  };
 
   const takePicture = async () => {
     if (cameraRef.current && cameraReady) {
@@ -54,7 +66,8 @@ export default function Cedu1({ showCamera, setShowCamera }) {
         skipProcessing: true,
         quality: 0.10,
         width: 371,
-        height: 595
+        height: 595,
+        exif: false,
        });
       return photo.base64;
     }
@@ -104,33 +117,36 @@ export default function Cedu1({ showCamera, setShowCamera }) {
 }
 
 
-  const handleDeletePhoto = async () => {
-    Alert.alert(
-      'Confirmar eliminación',
-      '¿Estás seguro/a de que deseas eliminar este elemento?',
-      [
-        {
-          text: 'Cancelar',
-          style: 'cancel',
-        },
-        {
-          text: 'Eliminar',
-          style: 'destructive',
-          onPress: async () => {
-              await FileSystem.deleteAsync(FileSystem.documentDirectory + 'photo5.jpg');
-              setPhoto5(null);
-              setCurrentPhoto(null);
-              await FileSystem.deleteAsync(FileSystem.documentDirectory + 'photo6.jpg');
-              setPhoto6(null);
-              setCurrentPhoto(null);
-          },
-        },
-      ],
-      { cancelable: false }
-    );
 
 
-  };
+
+const handleDeletePhoto = async () => {
+  Alert.alert(
+    'Confirmar eliminación',
+    '¿Estás seguro/a de que deseas eliminar este elemento?',
+    [
+      {
+        text: 'Cancelar',
+        style: 'cancel',
+      },
+      {
+        text: 'Eliminar',
+        style: 'destructive',
+        onPress: async () => {
+            await FileSystem.deleteAsync(FileSystem.documentDirectory + 'photo5.jpg');
+            setPhoto5(null);
+            setCurrentPhoto(null);
+            await FileSystem.deleteAsync(FileSystem.documentDirectory + 'photo6.jpg');
+            setPhoto6(null);
+            setCurrentPhoto(null);
+        },
+      },
+    ],
+    { cancelable: false }
+  );
+
+
+};
 
 
 
@@ -144,21 +160,20 @@ export default function Cedu1({ showCamera, setShowCamera }) {
    
    {!photo5 ? (
       <>
-      <View style={styles.volver}> 
+      
       <TouchableOpacity 
     onPress={() => setShowCamera(false)}  >
         <Ionicons name="chevron-back-circle-outline" size={30} color="#000000" />
-      </TouchableOpacity></View>
+      </TouchableOpacity>
       <Text style={styles.super1}>Delante</Text>
       <Text style={styles.textAyuda}>Toma la parte FRONTAL de tu documento</Text>
       </>
       ) : (
         <>
-         <View style={styles.volver}> 
       <TouchableOpacity 
     onPress={delante}  >
         <Ionicons name="chevron-back-circle-outline" size={30} color="#000000" />
-      </TouchableOpacity></View>
+      </TouchableOpacity>
         <Text style={styles.super1}>Detrás</Text>
         <Text style={styles.textAyuda}>Y ahora la parte de ATRÁS </Text>
         </>
@@ -169,6 +184,7 @@ export default function Cedu1({ showCamera, setShowCamera }) {
           facing={facing}
           ref={cameraRef}
           onCameraReady={() => setCameraReady(true)}
+          useCamera2Api={Platform.OS === 'android'}
         >
         <View style={styles.rectangleN} />
          
@@ -198,19 +214,30 @@ export default function Cedu1({ showCamera, setShowCamera }) {
           {currentPhoto ? (
             <>
              <>
+
              <Text style={styles.super3}>Cedula</Text>
-             <Text style={styles.textAyuda2}>toca la imagen para ver el dorso 🔄 </Text>
+             <Text style={styles.textAyuda2}>toca la imagen para ampliar</Text>
              </>
             <>
-             <TouchableOpacity onPress={() => setCurrentPhoto(currentPhoto === photo5 ? photo6 : photo5)}>
-              <Image source={{ uri: currentPhoto }} style={styles.image} />
+            <TouchableOpacity onPress={() => openModal([photo5, photo6])}>
+              <Image source={{ uri: photo5 }} style={styles.image} />
             </TouchableOpacity>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10,marginBottom:-70 }}>
+            <TouchableOpacity onPress={() => openModal([photo5, photo6])}>
+              <Image source={{ uri: photo6 }} style={styles.image} />
+            </TouchableOpacity>
+            <ImageModal 
+        visible={modalVisible} 
+        images={selectedImages} 
+        onClose={() => setModalVisible(false)} 
+      />
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 20,marginBottom:-70 }}>
             <Button title="Eliminar" onPress={handleDeletePhoto} />
+            
             <EnviarPdf1
      photo1={photo5}
      photo2={photo6}
      />
+  
             </View>
             </>
             </>
@@ -251,8 +278,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor:"#ebf1ff",
-    width: Platform.OS === 'android' ? 345: 380,
-    height: Platform.OS === 'android' ? 504:592,
+    width: Platform.OS === 'android' ? 360: 360,
+    height: Platform.OS === 'android' ? 230:230,
     borderWidth: 1,
     borderStyle: 'dashed',
     borderColor: "#000000",
@@ -261,12 +288,12 @@ const styles = StyleSheet.create({
   },
 
   camera: {
-    width: 349,
-    height: 552,
+    width: 373,
+    height: 240,
     marginTop:-50,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 20,
+    borderRadius: 15,
   },
   cameraButtonContainer: {
     flex: 1,
@@ -278,11 +305,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 365,
-    height: 564,
+    width: 389,
+    height: 252,
     borderWidth: 8,
     borderColor: "#e9eaee",
-    borderRadius: 24,
+    borderRadius: 22,
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -302,18 +329,20 @@ const styles = StyleSheet.create({
     width: Platform.OS === 'android' ? 70 :110,
     height: Platform.OS === 'android' ? 70 :110,
     borderRadius: 60,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#0075ff',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop:70
+
   },
   circle: {
-    width: Platform.OS === 'android' ? 65 :100,
-    height: Platform.OS === 'android' ? 65 :100,
+    width: Platform.OS === 'android' ? 65 :75,
+    height: Platform.OS === 'android' ? 65 :75,
     borderRadius: 50,
-    backgroundColor: '#1462fc',
+    backgroundColor: '#0075ff',
     alignItems: 'center',
     justifyContent: 'center',
-    transform: [{ rotate: '90deg' }]
+   // transform: [{ rotate: '90deg' }]
   },
   super1:{
     fontSize: 25,
@@ -330,7 +359,7 @@ marginTop: Platform.OS === 'android' ? 50 :-80,
   },
   super3:{
     fontSize: Platform.OS === 'android' ? 18 :25,
-marginTop: Platform.OS === 'android' ? -70 :-80,
+marginTop: Platform.OS === 'android' ? -70 :-120,
   },
   textAyuda2: {
     justifyContent: 'center',
@@ -360,8 +389,8 @@ marginTop: Platform.OS === 'android' ? -70 :-80,
 
   },
   image: {
-    width: Platform.OS === 'android' ? 345: 380,
-    height: Platform.OS === 'android' ? 504:592,
+    width: Platform.OS === 'android' ? 345: 393,
+    height: Platform.OS === 'android' ? 504:259,
     resizeMode: Platform.OS === 'ios' ? 'contain':'auto',
     borderWidth: 8,
     borderColor: "#e9eaee",
@@ -376,4 +405,3 @@ marginTop: Platform.OS === 'android' ? -70 :-80,
     marginLeft:"-85%",
   },
 });
-

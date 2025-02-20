@@ -17,7 +17,7 @@ export default function Habi1({ showCamera, setShowCamera }) {
   const cameraRef = useRef(null);
   const [facing, setFacing] = useState('back');
   const [modalVisible, setModalVisible] = useState(false);//
-  const [selectedImages, setSelectedImages] = useState([]);
+  const [selectedImages, setSelectedImages] = useState([]);//
 
 
 
@@ -53,7 +53,7 @@ export default function Habi1({ showCamera, setShowCamera }) {
     })();
   }, []);
 
-  
+  //
   const openModal = (images) => {
     setSelectedImages(images);
     setModalVisible(true);
@@ -230,7 +230,7 @@ const handleDeletePhoto = async () => {
         images={selectedImages} 
         onClose={() => setModalVisible(false)} 
       />
-            <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10,marginBottom:-70 }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 20,marginBottom:-70 }}>
             <Button title="Eliminar" onPress={handleDeletePhoto} />
             
             <EnviarPdf1
@@ -329,15 +329,17 @@ const styles = StyleSheet.create({
     width: Platform.OS === 'android' ? 70 :110,
     height: Platform.OS === 'android' ? 70 :110,
     borderRadius: 60,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#0075ff',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop:70
+
   },
   circle: {
     width: Platform.OS === 'android' ? 65 :75,
     height: Platform.OS === 'android' ? 65 :75,
     borderRadius: 50,
-    backgroundColor: '#1462fc',
+    backgroundColor: '#0075ff',
     alignItems: 'center',
     justifyContent: 'center',
    // transform: [{ rotate: '90deg' }]

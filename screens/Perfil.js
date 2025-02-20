@@ -292,7 +292,7 @@ const handleDeleteAccount = () => {
               {'\n\n'}5. Seguridad de los datos
               {'\n'}Implementamos medidas de seguridad técnicas y organizativas para proteger tu información contra el acceso, alteración, divulgación o destrucción no autorizada.
               {'\n\n'}6. Derechos del usuario
-              {'\n'}Tienes derecho a acceder, corregir, o eliminar tu información personal en cualquier momento. Para ejercer estos derechos, por favor contacta con nosotros a kuatiacardpy@gmail.com .
+              {'\n'}Tienes derecho a acceder, corregir, o eliminar tu información personal en cualquier momento. 
               {'\n\n'}7. Cambios en la política de privacidad
               {'\n'}Nos reservamos el derecho de modificar esta declaración de privacidad en cualquier momento. Notificaremos a los usuarios sobre cualquier cambio significativo a través de la aplicación o por correo electrónico.
               {'\n\n'}8. Contacto

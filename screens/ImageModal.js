@@ -1,4 +1,5 @@
-import { Modal, View, ScrollView, Image, Button, StyleSheet, Dimensions,Platform } from 'react-native';
+import { Modal, View, ScrollView, Image, TouchableOpacity, StyleSheet, Dimensions, Platform } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'; // Asegúrate de tener instalada la librería @expo/vector-icons
 
 const { width, height } = Dimensions.get('window');
 
@@ -6,14 +7,14 @@ const ImageModal = ({ visible, images, onClose }) => {
   return (
     <Modal visible={visible} transparent={true} animationType="slide">
       <View style={styles.modalContainer}>
+        <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+          <Ionicons name="close" size={24} color="white" />
+        </TouchableOpacity>
         <ScrollView>
           {images.map((img, index) => (
             <Image key={index} source={{ uri: img }} style={styles.modalImage} />
           ))}
         </ScrollView>
-        <View style={styles.closeButtonContainer}>
-          <Button title="Cerrar" onPress={onClose} />
-        </View>
       </View>
     </Modal>
   );
@@ -25,23 +26,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.9)',
-    paddingTop:30
+    paddingTop: 90,
   },
   modalImage: {
-    width: Platform.OS === 'android' ? 345: 545,
-    height: Platform.OS === 'android' ? 504:752,
+    width: Platform.OS === 'android' ? 345 : 545,
+    height: Platform.OS === 'android' ? 504 : 752,
     resizeMode: 'contain',
     transform: [{ rotate: '90deg' }],
-    margin:-100,
-    
+    margin: -100,
   },
-  closeButtonContainer: {
+  closeButton: {
     position: 'absolute',
-    bottom: 30, // Ajusta este valor para subir más el botón
-    alignSelf: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    borderRadius: 10,
-    padding: 10,
+    top: 40, // Ajusta la distancia desde la parte superior
+    right: 20, // Ajusta la distancia desde la derecha
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 20,
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10, // Asegura que el botón esté por encima de las imágenes
   },
 });
 

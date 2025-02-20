@@ -5,6 +5,7 @@ import * as FileSystem from 'expo-file-system';
 import { Ionicons } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import EnviarPdf1 from './EnviarPdf1';
+import ImageModal from './ImageModal';//
 
 
 export default function Habi3({ showCamera, setShowCamera }) {
@@ -16,6 +17,8 @@ export default function Habi3({ showCamera, setShowCamera }) {
   const [currentPhoto, setCurrentPhoto] = useState(null);
   const cameraRef = useRef(null);
   const [facing, setFacing] = useState('back');
+    const [modalVisible, setModalVisible] = useState(false);//
+    const [selectedImages, setSelectedImages] = useState([]);//
 
   useEffect(() => {
     (async () => {
@@ -46,6 +49,12 @@ export default function Habi3({ showCamera, setShowCamera }) {
       }
     })();
   }, []);
+
+    //
+    const openModal = (images) => {
+      setSelectedImages(images);
+      setModalVisible(true);
+    };
 
   const takePicture = async () => {
     if (cameraRef.current && cameraReady) {
@@ -197,13 +206,21 @@ const handleDeletePhoto = async () => {
             <>
              <>
              <Text style={styles.super3}>Habilitacion 3</Text>
-             <Text style={styles.textAyuda2}>toca la imagen para ver el dorso 🔄 </Text>
+             <Text style={styles.textAyuda2}>toca la imagen para ampliar</Text>
              </>
             <>
-             <TouchableOpacity onPress={() => setCurrentPhoto(currentPhoto === photo13 ? photo23 : photo13)}>
-              <Image source={{ uri: currentPhoto }} style={styles.image} />
+            <TouchableOpacity onPress={() => openModal([photo13, photo23])}>
+              <Image source={{ uri: photo13 }} style={styles.image} />
             </TouchableOpacity>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 10,marginBottom:-70 }}>
+            <TouchableOpacity onPress={() => openModal([photo13, photo23])}>
+              <Image source={{ uri: photo23 }} style={styles.image} />
+            </TouchableOpacity>
+            <ImageModal 
+        visible={modalVisible} 
+        images={selectedImages} 
+        onClose={() => setModalVisible(false)} 
+      />
+            <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 20,marginBottom:-70 }}>
             <Button title="Eliminar" onPress={handleDeletePhoto} />
             <EnviarPdf1
      photo1={photo13}
@@ -249,8 +266,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor:"#ebf1ff",
-    width: Platform.OS === 'android' ? 345: 380,
-    height: Platform.OS === 'android' ? 504:592,
+    width: Platform.OS === 'android' ? 360: 360,
+    height: Platform.OS === 'android' ? 230:230,
     borderWidth: 1,
     borderStyle: 'dashed',
     borderColor: "#000000",
@@ -259,12 +276,12 @@ const styles = StyleSheet.create({
   },
 
   camera: {
-    width: 349,
-    height: 552,
+    width: 373,
+    height: 240,
     marginTop:-50,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 20,
+    borderRadius: 15,
   },
   cameraButtonContainer: {
     flex: 1,
@@ -276,11 +293,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 365,
-    height: 564,
+    width: 389,
+    height: 252,
     borderWidth: 8,
     borderColor: "#e9eaee",
-    borderRadius: 24,
+    borderRadius: 22,
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -300,18 +317,20 @@ const styles = StyleSheet.create({
     width: Platform.OS === 'android' ? 70 :110,
     height: Platform.OS === 'android' ? 70 :110,
     borderRadius: 60,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#0075ff',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop:70
+
   },
   circle: {
-    width: Platform.OS === 'android' ? 65 :100,
-    height: Platform.OS === 'android' ? 65 :100,
+    width: Platform.OS === 'android' ? 65 :75,
+    height: Platform.OS === 'android' ? 65 :75,
     borderRadius: 50,
-    backgroundColor: '#1462fc',
+    backgroundColor: '#0075ff',
     alignItems: 'center',
     justifyContent: 'center',
-    transform: [{ rotate: '90deg' }]
+   // transform: [{ rotate: '90deg' }]
   },
   super1:{
     fontSize: 25,
@@ -328,7 +347,7 @@ marginTop: Platform.OS === 'android' ? 50 :-80,
   },
   super3:{
     fontSize: Platform.OS === 'android' ? 18 :25,
-marginTop: Platform.OS === 'android' ? -70 :-80,
+marginTop: Platform.OS === 'android' ? -70 :-120,
   },
   textAyuda2: {
     justifyContent: 'center',
@@ -358,8 +377,8 @@ marginTop: Platform.OS === 'android' ? -70 :-80,
 
   },
   image: {
-    width: Platform.OS === 'android' ? 345: 380,
-    height: Platform.OS === 'android' ? 504:592,
+    width: Platform.OS === 'android' ? 345: 393,
+    height: Platform.OS === 'android' ? 504:259,
     resizeMode: Platform.OS === 'ios' ? 'contain':'auto',
     borderWidth: 8,
     borderColor: "#e9eaee",

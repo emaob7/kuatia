@@ -92,7 +92,6 @@ const EnviarPdf1 = ({ photo1, photo2 }) => {
       </head>
       <body>
         <div class="container">
-          
           <div class="image-container">
             <div class="image-wrapper">
               <img class="imagen" src="${photo1}" alt="Licencia 1">
@@ -159,7 +158,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     alignItems: 'center',
-    backgroundColor: "#1462fc",
+    backgroundColor: "#0075ff",
     paddingHorizontal: 17,
     borderRadius: 10,
     height: 40,

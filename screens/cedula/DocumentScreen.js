@@ -262,14 +262,14 @@ function DocumentScreen() {
           : 'Asegúrate de que la imagen sea clara y legible.'}
       </Text>
     </View>
-          <View style={{ borderWidth: 4, borderColor: '#2196F3', borderRadius: 10, overflow: 'hidden' }}>
+          <View style={{ borderWidth: 4, borderColor: '#0075ff', borderRadius: 10, overflow: 'hidden' }}>
             <CameraView style={{ width: 360, height: 230 }} ref={cameraRef} />
           </View>
           <TouchableOpacity
             onPress={takePicture}
             style={{
               marginTop: 220,
-              backgroundColor: '#2196F3',
+              backgroundColor: '#0075ff',
               borderRadius: 100,
               padding: 45,
               justifyContent: 'center',
