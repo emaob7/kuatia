@@ -70,7 +70,14 @@ export default function Inicio() {
           onPress={() => navigation.navigate('Carnet')}
         >
           <Text style={styles.emoji}>📸</Text>
-          <Text style={styles.cardText}>Carnet</Text>
+          <Text style={styles.cardText}>Foto Carnet</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => navigation.navigate('DocumentScreen')}
+        >
+          <Text style={styles.emoji}>🪪</Text>
+          <Text style={styles.cardText}>Copia Cedulas</Text>
         </TouchableOpacity>
       </View>
     </>

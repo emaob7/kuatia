@@ -70,25 +70,36 @@ const EnviarPdf1 = ({ photo1, photo2 }) => {
             text-align: center;
             padding: 20px;
           }
+          .title {
+            font-size: 18px;
+            margin-bottom: 20px;
+          }
           .image-container {
             display: flex;
             justify-content: center;
-            gap: 130px;
+            gap: 30px;
             padding: 10px 50px 20px;
-            margin-top: -50px;
+            margin-top: -20px;
+          }
+          .image-wrapper {
+            width: auto;
           }
           .imagen {
             border-radius: 10px;
-            width: 200px;
-            transform: rotate(-90deg);
+            width: 300px;
           }
         </style>
       </head>
       <body>
         <div class="container">
+          
           <div class="image-container">
-            <img class="imagen" src="${photo1}" alt="Imagen 1">
-            <img class="imagen" src="${photo2}" alt="Imagen 2">
+            <div class="image-wrapper">
+              <img class="imagen" src="${photo1}" alt="Licencia 1">
+            </div>
+            <div class="image-wrapper">
+              <img class="imagen" src="${photo2}" alt="Licencia 2">
+            </div>
           </div>
         </div>
       </body>

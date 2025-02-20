@@ -254,6 +254,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: 'dashed',
     borderColor: "#000000",
+    backgroundColor:"#ebf1ff",
     borderRadius: 24,
 
   },

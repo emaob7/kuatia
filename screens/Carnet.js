@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Button, Image, Alert, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Button, Image, Alert, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { AntDesign } from '@expo/vector-icons';
 import * as ImageManipulator from 'expo-image-manipulator';
@@ -150,43 +150,51 @@ const htmlContent = `
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 20 }}>
+      
       {showCamera ? (
         <View style={{ width: '100%', alignItems: 'center', marginTop: 40 }}>
+           <Text style={styles.subtitle}>
+              📸Busca una pared o fondo blanco para tu foto, asegurate de que sea en un lugar iluminado.   
+            </Text>
           {/* Contenedor con borde y esquinas redondeadas */}
-          <View style={{ borderWidth: 4, borderColor: '#2196F3', borderRadius: 10, overflow: 'hidden' }}>
+          <View style={{ borderWidth: 4, borderColor: '#0075ff', borderRadius: 10, overflow: 'hidden' }}>
             <CameraView style={{ width: 300, height: 350 }} ref={cameraRef} />
           </View>
           {/* Botón para tomar la foto */}
           <TouchableOpacity
             onPress={takePicture}
             style={{
-              marginTop: 20,
-              backgroundColor: '#2196F3',
-              borderRadius: 50,
-              padding: 15,
+              marginTop: 120,
+              backgroundColor: '#0075ff',
+              borderRadius: 90,
+              padding: 35,
               justifyContent: 'center',
               alignItems: 'center',
             }}
           >
-            <AntDesign name="camera" size={30} color="white" />
+            <AntDesign name="camera" size={50} color="white" />
           </TouchableOpacity>
         </View>
       ) : (
         <View style={{ width: '100%' }}>
           {photoUris.map((photoUri, index) => (
-            <View key={index} style={{ marginBottom: 20 }}>
+            <View key={index} style={{ marginBottom: 10 }}>
               {!photoUri ? (
                 <TouchableOpacity
                   onPress={() => {
                     setActivePhotoIndex(index);
                     setShowCamera(true);
                   }}
-                  style={{ width: '100%', height: 170, justifyContent: 'center', alignItems: 'center', backgroundColor: '#ddd', borderRadius: 10 }}
+                  style={{ width: '100%', height: 170, justifyContent: 'center', alignItems: 'center', borderWidth: 1,
+                    borderStyle: 'dashed',
+                    borderColor: "#0075ff",
+                    backgroundColor:"#ffffff", borderRadius: 10 }}
                 >
-                  <AntDesign name="plus" size={50} color="black" />
+                  <Text style={{ marginBottom: 10 }}>Toma una foto tipo carnet</Text>
+                  <AntDesign name="plus" size={50} color="#0075ff" />
                 </TouchableOpacity>
               ) : (
-                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomColor:"#ddd",borderBottomWidth:1,padding:12, backgroundColor:"white",borderRadius:10 }}>
                   <Image
                     source={{ uri: photoUri }}
                     style={{ width: 150, height: 170, marginRight: 10, borderRadius: 10 }}
@@ -229,7 +237,7 @@ const htmlContent = `
       marginHorizontal: 8 
     }}
   >
-    <AntDesign name="delete" size={24} color="red" />
+    <AntDesign name="delete" size={24} color='#0075ff' />
   </TouchableOpacity>
    {/* Botón para compartir JPG */}
    <TouchableOpacity
@@ -242,13 +250,13 @@ const htmlContent = `
       marginHorizontal: 8 
     }}
   >
-    <AntDesign name="jpgfile1" size={24} color="green" />
+    <AntDesign name="jpgfile1" size={24} color='#0075ff' />
   </TouchableOpacity>
   {/* Botón para generar PDF */}
   <TouchableOpacity
     onPress={() => generatePDF(index)}
     style={{ 
-      backgroundColor: '#2196F3', 
+      backgroundColor: '#0075ff', 
       borderRadius: 50, 
       padding: 12, 
       alignItems: 'center', 
@@ -273,5 +281,16 @@ const htmlContent = `
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  subtitle: {
+    fontSize: 16,
+    fontWeight: '400',
+    textAlign: 'center',
+    color: '#555',
+    marginTop: 5,
+    marginBottom: 15,
+  }
+  })
 
 export default Carnet;

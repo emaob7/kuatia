@@ -14,6 +14,7 @@ import Vehiculo3 from './screens/Vehiculo3';
 import Vehiculo4 from './screens/Vehiculo4';
 import Perfil from './screens/Perfil';
 import Carnet from './screens/Carnet';
+import DocumentScreen from './screens/cedula/DocumentScreen';
 
 
 LogBox.ignoreLogs(['Sending `onAnimatedValueUpdate` with no listeners registered.']);
@@ -53,7 +54,8 @@ export default function App() {
         <Stack.Screen name="Vehiculo2" component={Vehiculo2} options={{ title: '🏍️ Vehiculo 2' }}/>
         <Stack.Screen name="Vehiculo3" component={Vehiculo3} options={{ title: '🚗🏍️ Vehiculo 3' }}/>
         <Stack.Screen name="Vehiculo4" component={Vehiculo4} options={{ title: '🚗🏍️ Vehiculo 4' }}/>
-        <Stack.Screen name="Carnet" component={Carnet} options={{ title: 'Carnet' }}/>
+        <Stack.Screen name="Carnet" component={Carnet} options={{ title: '📸 Foto tipo Carnet' }}/>
+        <Stack.Screen name="DocumentScreen" component={DocumentScreen} options={{ title: '🪪 Copia de Cedulas' }}/>
         <Stack.Screen name="Cuenta" component={Perfil} />
       </Stack.Navigator>
     </NavigationContainer>
