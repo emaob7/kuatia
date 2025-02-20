@@ -2,7 +2,7 @@
   "expo": {
     "name": "kuatia",
     "slug": "kuatia",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "permissions": [
       "WRITE_EXTERNAL_STORAGE",
       "READ_EXTERNAL_STORAGE"

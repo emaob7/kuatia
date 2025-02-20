@@ -282,7 +282,7 @@ export default function Login() {
               {'\n\n'}6. Propiedad intelectual
               {'\n'}Todos los contenidos, marcas registradas, logotipos y gráficos proporcionados por Kuatia son propiedad de Kuatia y están protegidos por las leyes de propiedad intelectual.
               {'\n\n'}7. Limitación de responsabilidad
-              {'\n'}Kuatia no será responsable de ningún daño directo, indirecto, incidental, especial, o consecuente que resulte del uso o la incapacidad de usar la aplicación. Además, Kuatia no será responsable si la información de tu cuenta de google es hackeada o comprometida de alguna manera. Los usuarios son responsables de tomar las medidas necesarias para proteger sus cuentas de google.
+              {'\n'}Kuatia no será responsable de ningún daño directo, indirecto, incidental, especial, o consecuente que resulte del uso o la incapacidad de usar la aplicación. Además, Kuatia no será responsable si la información de tu cuenta de google/apple es hackeada o comprometida de alguna manera. Los usuarios son responsables de tomar las medidas necesarias para proteger sus cuentas de google/apple.
               {'\n\n'}8. Modificaciones de los términos
               {'\n'}Nos reservamos el derecho de modificar estos términos de servicio en cualquier momento. Notificaremos a los usuarios sobre cualquier cambio significativo. El uso continuo de la aplicación después de la notificación de cambios constituye tu aceptación de los nuevos términos.
               {'\n\n'}9. Contacto
