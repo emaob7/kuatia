@@ -8,6 +8,7 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import ImageModal from '../ImageModal';
 
 const PHOTO_STORAGE_PATH = FileSystem.documentDirectory + 'document_';
 
@@ -19,6 +20,9 @@ function DocumentScreen() {
   const cameraRef = useRef(null);
   const [permission, requestPermission] = useCameraPermissions();
   const scrollViewRef = useRef(null); // Referencia para el ScrollView
+
+    const [modalVisible, setModalVisible] = useState(false);//
+    const [selectedImages, setSelectedImages] = useState([]);//
 
   useEffect(() => {
     if (!permission) {
@@ -240,6 +244,12 @@ function DocumentScreen() {
     );
   }
 
+  const openModal = (images) => {
+    setSelectedImages(images);
+    setModalVisible(true);
+  };
+
+
   return (
     <KeyboardAvoidingView
     behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -300,17 +310,25 @@ function DocumentScreen() {
                 </TouchableOpacity>
               ) : (
                 <View style={{ flexDirection: 'row', alignItems: 'center', borderBottomColor:"#ddd",borderBottomWidth:1,padding:12, backgroundColor:"white",borderRadius:10 }}>
-                  
+                  <TouchableOpacity onPress={() => openModal([document.front, document.back])}>
                   <View style={{ flexDirection: 'column', alignItems: 'left' }}>
+                    
                     <Image
                       source={{ uri: document.front }}
                       style={{ width: 140, height: 90, marginRight: 10, marginBottom: 5, borderRadius: 10 }}
                     />
+                    
                     <Image
                       source={{ uri: document.back }}
                       style={{ width: 140, height: 90, marginRight: 10, borderRadius: 10 }}
                     />
                   </View>
+                  </TouchableOpacity>
+                  <ImageModal 
+        visible={modalVisible} 
+        images={selectedImages} 
+        onClose={() => setModalVisible(false)} 
+      />
                   <View>
                   <TextInput
                         style={styles.input}

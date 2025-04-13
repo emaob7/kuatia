@@ -19,7 +19,37 @@ import DocumentScreen from './screens/cedula/DocumentScreen';
 
 LogBox.ignoreLogs(['Sending `onAnimatedValueUpdate` with no listeners registered.']);
 
+/*
+This worked for me (expo 52.0.36):
 
+npx expo install --check
+
+npx expo install expo-build-properties
+In app.json, add:
+
+{
+  "expo": {
+   ...
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 35,
+            "targetSdkVersion": 34,
+            "buildToolsVersion": "35.0.0",
+            "kotlinVersion": "1.9.25"
+          }
+        }
+      ]
+   ...
+    ],
+Then run:
+
+npx expo prebuild --platform android
+npx expo run:android
+It should work!
+*/
 
 
 

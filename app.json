@@ -22,6 +22,8 @@
       "versionCode": 1,
       "permissions": [
         "WRITE_EXTERNAL_STORAGE",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
         "READ_EXTERNAL_STORAGE"
       ],
       "adaptiveIcon": {
@@ -33,19 +35,33 @@
       "googleServicesFile": "./GoogleService-Info.plist",
       "bundleIdentifier": "com.cardpy.kuatia",
       "supportsTablet": false,
-      "buildNumber": "1",
+      "buildNumber": "2",
       "usesAppleSignIn": true,
       "newArchEnabled": false,
       "appleTeamId": "T36FC9H864",
       "infoPlist": {
-        "UISupportedDevices": ["iPhone"],
-    "NSCameraUsageDescription": "Necesitamos acceso a la cámara para tomar fotos."
+        "UISupportedDevices": [
+          "iPhone",
+          "iPhone"
+        ],
+        "NSCameraUsageDescription": "Necesitamos acceso a la cámara para tomar fotos."
       }
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 35,
+            "targetSdkVersion": 34,
+            "buildToolsVersion": "35.0.0",
+            "kotlinVersion": "1.9.25"
+          }
+        }
+      ],
       [
         "expo-apple-authentication"
       ],
@@ -60,15 +76,7 @@
         {
           "launchMode": "most-recent"
         }
-      ],
-      [
-        "react-native-vision-camera",
-        {
-          "cameraPermissionText": "$(PRODUCT_NAME) needs access to your Camera."
-  
-        }
-      ],
-      "expo-build-properties"
+      ]
     ],
     "extra": {
       "eas": {
@@ -76,7 +84,11 @@
       }
     },
     "scheme": "kuatia",
-    "owner": "cardpy7"
+    "owner": "cardpy7",
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/97967b95-c6e8-4ff3-bb28-848a3461e987"
+    }
   },
   "react-native-google-mobile-ads": {
     "android_app_id": "ca-app-pub-4622872693950947~5049209369",

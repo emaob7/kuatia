@@ -1,27 +1,18 @@
 {
   "cli": {
-    "version": ">= 10.2.2",
+    "version": ">= 16.2.2",
     "appVersionSource": "remote"
   },
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal",
-      "android": {
-        "buildType": "apk"
-      }
+      "distribution": "internal"
     },
     "preview": {
       "distribution": "internal"
     },
     "production": {
-      "distribution": "store",
-      "android": {
-        "buildType": "app-bundle"
-      },
-      "env": {
-        "EXAMPLE_VARIABLE": "value" 
-      }
+      "autoIncrement": true
     }
   },
   "submit": {
