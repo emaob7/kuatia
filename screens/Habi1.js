@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, Button, Image, TouchableOpacity, StyleSheet, Alert, Platform } from 'react-native';
 import { Camera, CameraView } from 'expo-camera';
+import * as ImageManipulator from 'expo-image-manipulator';
 import * as FileSystem from 'expo-file-system';
 import { Ionicons } from '@expo/vector-icons';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -31,17 +32,17 @@ export default function Habi1({ showCamera, setShowCamera }) {
   useEffect(() => {
     (async () => {
       try {
-        const photo1Uri = await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'photo1.jpg');
-        const photo2Uri = await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'photo2.jpg');
+        const photo1Uri = await FileSystem.getInfoAsync(`${FileSystem.documentDirectory}photo1.jpg`);
+        const photo2Uri = await FileSystem.getInfoAsync(`${FileSystem.documentDirectory}photo2.jpg`);
         
         if (photo1Uri.exists) {
-          const photo1Base64 = await FileSystem.readAsStringAsync(FileSystem.documentDirectory + 'photo1.jpg', { encoding: FileSystem.EncodingType.Base64 });
+          const photo1Base64 = await FileSystem.readAsStringAsync(`${FileSystem.documentDirectory}photo1.jpg`, { encoding: FileSystem.EncodingType.Base64 });
           setPhoto1(`data:image/jpg;base64,${photo1Base64}`);
           setCurrentPhoto(`data:image/jpg;base64,${photo1Base64}`);
         }
 
         if (photo2Uri.exists) {
-          const photo2Base64 = await FileSystem.readAsStringAsync(FileSystem.documentDirectory + 'photo2.jpg', { encoding: FileSystem.EncodingType.Base64 });
+          const photo2Base64 = await FileSystem.readAsStringAsync(`${FileSystem.documentDirectory}photo2.jpg`, { encoding: FileSystem.EncodingType.Base64 });
           setPhoto2(`data:image/jpg;base64,${photo2Base64}`);
         }
 
@@ -61,15 +62,29 @@ export default function Habi1({ showCamera, setShowCamera }) {
 
   const takePicture = async () => {
     if (cameraRef.current && cameraReady) {
+      // Primero toma la foto completa
       const photo = await cameraRef.current.takePictureAsync({ 
         base64: true,
         skipProcessing: true,
         quality: 0.10,
-        width: 371,
-        height: 595,
         exif: false,
-       });
-      return photo.base64;
+      });
+      
+      // Luego recorta la imagen al área deseada
+      const croppedPhoto = await ImageManipulator.manipulateAsync(
+        photo.uri,
+        [{
+          crop: {
+            originX: (photo.width - 340) / 2, // Centrar horizontalmente
+            originY: (photo.height - 224) / 2, // Centrar verticalmente
+            width: 540,
+            height: 424
+          }
+        }],
+        { compress: 1, format: ImageManipulator.SaveFormat.JPEG, base64: true }
+      );
+      
+      return croppedPhoto.base64;
     }
     return null;
   };
@@ -111,7 +126,7 @@ export default function Habi1({ showCamera, setShowCamera }) {
 
 
   const delante =async () => {
-    await FileSystem.deleteAsync(FileSystem.documentDirectory + 'photo1.jpg');
+    await FileSystem.deleteAsync(`${FileSystem.documentDirectory}photo1.jpg`);
     setPhoto1(null);
     setCurrentPhoto(photo2 ? photo2 : null);
 }
@@ -133,10 +148,10 @@ const handleDeletePhoto = async () => {
         text: 'Eliminar',
         style: 'destructive',
         onPress: async () => {
-            await FileSystem.deleteAsync(FileSystem.documentDirectory + 'photo1.jpg');
+            await FileSystem.deleteAsync(`${FileSystem.documentDirectory}photo1.jpg`);
             setPhoto1(null);
             setCurrentPhoto(null);
-            await FileSystem.deleteAsync(FileSystem.documentDirectory + 'photo2.jpg');
+            await FileSystem.deleteAsync(`${FileSystem.documentDirectory}photo2.jpg`);
             setPhoto2(null);
             setCurrentPhoto(null);
         },
@@ -248,7 +263,6 @@ const handleDeletePhoto = async () => {
              <Text style={styles.super2}>Habilitacion 1</Text>
              <Text style={styles.textAyuda2}>Busca un lugar iluminado para que la foto salga bien ✨ </Text>
              </View>
-            <>
             <TouchableOpacity onPress={() => setShowCamera(true)} style={styles.agregar}>
             <View style={styles.circle} >
            
@@ -256,7 +270,6 @@ const handleDeletePhoto = async () => {
   
             </View>
           </TouchableOpacity>
-          </>
           </>
 
           )}
@@ -303,13 +316,13 @@ const styles = StyleSheet.create({
   },
   rectangleN: {
     position: 'absolute',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 389,
-    height: 252,
+    width: 340,  // Mismo ancho que el recorte
+    height: 215, // Mismo alto que el recorte
     borderWidth: 8,
     borderColor: "#e9eaee",
     borderRadius: 22,
+    alignSelf: 'center',
+    top: '30%', // Ajusta según necesites
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -389,13 +402,13 @@ marginTop: Platform.OS === 'android' ? -70 :-120,
 
   },
   image: {
-    width: Platform.OS === 'android' ? 345: 393,
-    height: Platform.OS === 'android' ? 504:259,
+    width: Platform.OS === 'android' ? 340: 393,
+    height: Platform.OS === 'android' ? 224:259,
     resizeMode: Platform.OS === 'ios' ? 'contain':'auto',
     borderWidth: 8,
     borderColor: "#e9eaee",
     borderRadius: 24,
-  transform: Platform.OS === 'android' ?[{ rotate: '0deg' }]:'auto',
+ // transform: Platform.OS === 'android' ?[{ rotate: '0deg' }]:'auto',
     marginVertical:Platform.OS === 'android' ? 10 : '0',
   },
   volver: {

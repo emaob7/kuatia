@@ -7,7 +7,7 @@ import * as Sharing from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
-const PHOTO_STORAGE_PATH = FileSystem.documentDirectory + 'photo_';
+const PHOTO_STORAGE_PATH = `${FileSystem.documentDirectory}photo_`;
 
 function Carnet() {
   const [photoUris, setPhotoUris] = useState(Array(4).fill(null)); // Estado para 4 fotos
@@ -22,7 +22,7 @@ function Carnet() {
       requestPermission();
     }
     loadSavedPhotos();
-  }, [permission]);
+  }, [permission, requestPermission]); // Ahora incluye todas las dependencias
 
   const loadSavedPhotos = async () => {
     const savedPhotos = await Promise.all(
@@ -178,7 +178,8 @@ const htmlContent = `
       ) : (
         <View style={{ width: '100%' }}>
           {photoUris.map((photoUri, index) => (
-            <View key={index} style={{ marginBottom: 10 }}>
+            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+<View key={index} style={{ marginBottom: 10 }}>
               {!photoUri ? (
                 <TouchableOpacity
                   onPress={() => {

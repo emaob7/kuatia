@@ -67,12 +67,12 @@ const EnviarPdf2 = ({ photo1, photo2 }) => {
             justify-content: center;
             gap: 130px;
             padding: 10px 50px 20px;
-            margin-top: -50px;
+            margin-top: 40px;
           }
           .imagen {
             border-radius: 10px;
-            width: 200px;
-            transform: rotate(-90deg);
+            width: 340px;
+            height: 180px;
           }
         </style>
       </head>

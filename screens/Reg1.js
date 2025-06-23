@@ -30,17 +30,17 @@ export default function Reg1({ showCamera, setShowCamera }) {
   useEffect(() => {
     (async () => {
       try {
-        const photo3Uri = await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'photo3.jpg');
-        const photo4Uri = await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'photo4.jpg');
+        const photo3Uri = await FileSystem.getInfoAsync(`${FileSystem.documentDirectory}photo3.jpg`);
+        const photo4Uri = await FileSystem.getInfoAsync(`${FileSystem.documentDirectory}photo4.jpg`);
         
         if (photo3Uri.exists) {
-          const photo3Base64 = await FileSystem.readAsStringAsync(FileSystem.documentDirectory + 'photo3.jpg', { encoding: FileSystem.EncodingType.Base64 });
+          const photo3Base64 = await FileSystem.readAsStringAsync(`${FileSystem.documentDirectory}photo3.jpg`, { encoding: FileSystem.EncodingType.Base64 });
           setPhoto3(`data:image/jpg;base64,${photo3Base64}`);
           setCurrentPhoto(`data:image/jpg;base64,${photo3Base64}`);
         }
 
         if (photo4Uri.exists) {
-          const photo4Base64 = await FileSystem.readAsStringAsync(FileSystem.documentDirectory + 'photo4.jpg', { encoding: FileSystem.EncodingType.Base64 });
+          const photo4Base64 = await FileSystem.readAsStringAsync(`${FileSystem.documentDirectory}photo4.jpg`, { encoding: FileSystem.EncodingType.Base64 });
           setPhoto4(`data:image/jpg;base64,${photo4Base64}`);
         }
 
@@ -107,7 +107,7 @@ export default function Reg1({ showCamera, setShowCamera }) {
 
 
   const delante =async () => {
-    await FileSystem.deleteAsync(FileSystem.documentDirectory + 'photo3.jpg');
+    await FileSystem.deleteAsync(`${FileSystem.documentDirectory}photo3.jpg`);
     setPhoto3(null);
     setCurrentPhoto(photo4 ? photo4 : null);
 }
@@ -126,10 +126,10 @@ const handleDeletePhoto = async () => {
         text: 'Eliminar',
         style: 'destructive',
         onPress: async () => {
-            await FileSystem.deleteAsync(FileSystem.documentDirectory + 'photo3.jpg');
+            await FileSystem.deleteAsync(`${FileSystem.documentDirectory}photo3.jpg`);
             setPhoto3(null);
             setCurrentPhoto(null);
-            await FileSystem.deleteAsync(FileSystem.documentDirectory + 'photo4.jpg');
+            await FileSystem.deleteAsync(`${FileSystem.documentDirectory}photo4.jpg`);
             setPhoto4(null);
             setCurrentPhoto(null);
         },
@@ -235,7 +235,6 @@ const handleDeletePhoto = async () => {
              <Text style={styles.super2}>Licencia 1</Text>
              <Text style={styles.textAyuda2}>Busca un lugar iluminado para que la foto salga bien ✨ </Text>
              </View>
-            <>
             <TouchableOpacity onPress={() => setShowCamera(true)} style={styles.agregar}>
             <View style={styles.circle} >
            
@@ -243,7 +242,6 @@ const handleDeletePhoto = async () => {
   
             </View>
           </TouchableOpacity>
-          </>
           </>
 
           )}
